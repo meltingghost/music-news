@@ -1,8 +1,9 @@
-import Container from "@/app/_components/container";
-import { HeroPost } from "@/app/_components/hero-post";
-import { Intro } from "@/app/_components/intro";
-import { MoreStories } from "@/app/_components/more-stories";
-import { getAllPosts } from "@/lib/api";
+import React from "react";
+import Container from "../app/_components/container";
+import { HeroPost } from "../app/_components/hero-post";
+import { Intro } from "../app/_components/intro";
+import { MoreStories } from "../app/_components/more-stories";
+import { getAllPosts } from "../app/lib/api";
 import MusicNews from "./_components/search-result";
 
 export default function Index() {
