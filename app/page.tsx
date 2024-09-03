@@ -1,10 +1,10 @@
 import React from "react";
-import Container from "../app/_components/container";
-import { HeroPost } from "../app/_components/hero-post";
-import { Intro } from "../app/_components/intro";
-import { MoreStories } from "../app/_components/more-stories";
+import Container from "./components/container";
+import { HeroPost } from "./components/hero-post";
+import { Intro } from "./components/intro";
+import { MoreStories } from "./components/more-stories";
 import { getAllPosts } from "../app/lib/api";
-import MusicNews from "./_components/search-result";
+import MusicNews from "./components/search-result";
 
 export default function Index() {
   const allPosts = getAllPosts();
