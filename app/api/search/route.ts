@@ -42,7 +42,7 @@ export async function GET(req: NextRequest) {
     }
 
     const data = await response.json();
-    return NextResponse.json(data.results as SearchResult[]);
+    return NextResponse.json(data.results as SearchResult[], { status: 200 });
   } catch (error) {
     return NextResponse.json(
       { error: "Failed to fetch search results" },
