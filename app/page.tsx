@@ -3,7 +3,7 @@ import Container from "./components/container";
 import { HeroPost } from "./components/hero-post";
 import { Intro } from "./components/intro";
 import { MoreStories } from "./components/more-stories";
-import { getAllPosts } from "../app/lib/api";
+import { getAllPosts } from "../lib/api";
 import MusicNews from "./components/search-result";
 
 export default function Index() {
