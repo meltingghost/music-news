@@ -1,8 +1,8 @@
-import Avatar from "@/app/_components/avatar";
-import CoverImage from "@/app/_components/cover-image";
+import Avatar from "@/components/avatar";
+import CoverImage from "@/components/cover-image";
 import { type Author } from "@/interfaces/author";
 import Link from "next/link";
-import DateFormatter from "./date-formatter";
+import DateFormatter from "@/components/date-formatter";
 
 type Props = {
   title: string;

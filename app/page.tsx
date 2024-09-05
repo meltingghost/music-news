@@ -1,8 +1,10 @@
-import Container from "@/app/_components/container";
-import { HeroPost } from "@/app/_components/hero-post";
-import { Intro } from "@/app/_components/intro";
-import { MoreStories } from "@/app/_components/more-stories";
+import React from "react";
+import Container from "@/app/components/container";
+import { HeroPost } from "@/app/components/hero-post";
+import { Intro } from "@/app/components/intro";
+import { MoreStories } from "@/app/components/more-stories";
 import { getAllPosts } from "@/lib/api";
+import MusicNews from "@/app/components/search-result";
 
 export default function Index() {
   const allPosts = getAllPosts();
@@ -15,15 +17,16 @@ export default function Index() {
     <main>
       <Container>
         <Intro />
-        <HeroPost
+        {/* <HeroPost
           title={heroPost.title}
           coverImage={heroPost.coverImage}
           date={heroPost.date}
           author={heroPost.author}
           slug={heroPost.slug}
           excerpt={heroPost.excerpt}
-        />
-        {morePosts.length > 0 && <MoreStories posts={morePosts} />}
+        /> */}
+        <MusicNews />
+        {/* {morePosts.length > 0 && <MoreStories posts={morePosts} />} */}
       </Container>
     </main>
   );
