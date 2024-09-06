@@ -1,8 +1,15 @@
-"use server";
-import { neon } from "@neondatabase/serverless";
+import { PrismaClient } from "@prisma/client";
 
-export async function getData() {
-  const sql = neon(process.env.DATABASE_URL || "default_connection_string");
-  const data = await sql`...`;
-  return data;
+const prisma = new PrismaClient();
+
+export async function getPosts() {
+  try {
+    const posts = await prisma.post.findMany();
+    return posts;
+  } catch (error) {
+    console.error("Error al obtener las entradas:", error);
+    throw error;
+  } finally {
+    await prisma.$disconnect();
+  }
 }

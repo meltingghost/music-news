@@ -5,6 +5,7 @@ import { Intro } from "./components/intro";
 import { MoreStories } from "./components/more-stories";
 import { getAllPosts } from "../lib/api";
 import MusicNews from "./components/search-result";
+import TablePosts from "./components/table";
 
 export default function Index() {
   const allPosts = getAllPosts();
@@ -26,6 +27,7 @@ export default function Index() {
           excerpt={heroPost.excerpt}
         /> */}
         <MusicNews />
+        <TablePosts />
         {/* {morePosts.length > 0 && <MoreStories posts={morePosts} />} */}
       </Container>
     </main>
