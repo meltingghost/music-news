@@ -26,6 +26,7 @@ export default function Index() {
           excerpt={heroPost.excerpt}
         /> */}
         <MusicNews />
+        <TablePosts />
         {/* {morePosts.length > 0 && <MoreStories posts={morePosts} />} */}
       </Container>
     </main>

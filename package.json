@@ -2,10 +2,11 @@
   "private": true,
   "scripts": {
     "dev": "next",
-    "build": "next build",
+    "build": "prisma generate && next build",
     "start": "next start"
   },
   "dependencies": {
+    "@prisma/client": "5.19.1",
     "classnames": "^2.5.1",
     "date-fns": "^3.6.0",
     "gray-matter": "^4.0.3",
@@ -21,6 +22,7 @@
     "@types/react-dom": "^18.3.0",
     "autoprefixer": "^10.4.20",
     "postcss": "^8.4.42",
+    "prisma": "^5.19.1",
     "tailwindcss": "^3.4.10",
     "typescript": "^5.5.2"
   }
