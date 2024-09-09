@@ -13,11 +13,19 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Post {
+model NewsArticle {
   id          Int      @id @default(autoincrement())
-  title       String   @unique
-  author      String
-  description String
-  date        DateTime @default(now())
+  type        String
+  title       String
+  url         String   @unique
+  description String?
+  age         String?
+  pageAge     DateTime?
+  scheme      String
+  netloc      String
+  hostname    String
+  favicon     String?
+  path        String?
+  thumbnail   String?
 }
 

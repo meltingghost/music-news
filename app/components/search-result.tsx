@@ -1,12 +1,36 @@
 "use client";
 import React from "react";
 import { useState } from "react";
+import prisma from "@/lib/prisma";
 
 type SearchResult = {
   title: string;
   snippet: string;
   url: string;
 };
+
+interface MetaUrl {
+  scheme: string;
+  netloc: string;
+  hostname: string;
+  favicon: string;
+  path: string;
+}
+
+interface Thumbnail {
+  src: string;
+}
+
+interface ArticleData {
+  type: string;
+  title: string;
+  url: string;
+  description: string;
+  age: string;
+  page_age: Date;
+  meta_url: MetaUrl;
+  thumbnail: Thumbnail;
+}
 
 export default function MusicNews() {
   const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
@@ -16,6 +40,33 @@ export default function MusicNews() {
       const res = await fetch(`/api/search?query=${query}`);
       const data = await res.json();
       setSearchResults(data);
+
+      for (const result of data) {
+        await fetch("/api/storeArticle", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            type: result.type,
+            title: result.title,
+            url: result.url,
+            description: result.description,
+            age: result.age,
+            page_age: result.pageAge,
+            meta_url: {
+              scheme: result.meta_url.scheme,
+              netloc: result.meta_url.netloc,
+              hostname: result.meta_url.hostname,
+              favicon: result.meta_url.favicon,
+              path: result.meta_url.path,
+            },
+            thumbnail: {
+              src: result.thumbnail?.src,
+            },
+          }),
+        });
+      }
     } catch (error) {
       console.error("Error fetching search results:", error);
     }
