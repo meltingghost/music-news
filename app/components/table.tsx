@@ -1,16 +1,16 @@
 import prisma from "@/lib/prisma";
 
-async function getPosts() {
+async function getNews() {
   try {
-    return await prisma.post.findMany();
+    return await prisma.newsArticle.findMany();
   } catch (error) {
-    console.error("Error fetching posts:", error);
+    console.error("Error fetching news:", error);
     return [];
   }
 }
 
-const TablePosts = async () => {
-  const posts = await getPosts();
+const TableNews = async () => {
+  const news = await getNews();
   return (
     <div className="p-4">
       <h1 className="text-2xl font-bold mb-4">Lista de Entradas</h1>
@@ -22,7 +22,7 @@ const TablePosts = async () => {
                 Title
               </th>
               <th className="py-2 px-4 border-b border-gray-200 bg-gray-100 text-left text-sm font-semibold text-gray-700">
-                Author
+                Age
               </th>
               <th className="py-2 px-4 border-b border-gray-200 bg-gray-100 text-left text-sm font-semibold text-gray-700">
                 Description
@@ -30,16 +30,16 @@ const TablePosts = async () => {
             </tr>
           </thead>
           <tbody>
-            {posts.map((post) => (
-              <tr key={post.id} className="hover:bg-gray-50">
+            {news.map((article) => (
+              <tr key={article.id} className="hover:bg-gray-50">
                 <td className="py-2 px-4 border-b border-gray-200">
-                  {post.title}
+                  {article.title}
                 </td>
                 <td className="py-2 px-4 border-b border-gray-200">
-                  {post.author}
+                  {article.age}
                 </td>
                 <td className="py-2 px-4 border-b border-gray-200">
-                  {post.description}
+                  {article.description}
                 </td>
               </tr>
             ))}
@@ -50,4 +50,4 @@ const TablePosts = async () => {
   );
 };
 
-export default TablePosts;
+export default TableNews;
