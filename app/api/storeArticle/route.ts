@@ -55,6 +55,10 @@ export async function GET(req: NextRequest) {
           console.log(`Article with URL ${article.url} already exists.`);
         }
       }
+      return NextResponse.json(
+        { message: "Articles processed successfully" },
+        { status: 200 }
+      );
     } else {
       console.error("No results found in the API response.");
       return NextResponse.json({ error: "No results found" }, { status: 520 });
