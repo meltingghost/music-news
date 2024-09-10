@@ -1,23 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 
-type SearchResult = {
-  title: string;
-  snippet: string;
-  url: string;
-};
-
 export async function GET(req: NextRequest) {
-  const { searchParams } = new URL(req.url);
-  const query = searchParams.get("query");
-
-  if (!query) {
-    return NextResponse.json(
-      { error: "Invalid query parameter" },
-      { status: 400 }
-    );
-  }
-
   const token = process.env.BRAVE_API_TOKEN;
 
   if (!token) {
@@ -43,12 +27,9 @@ export async function GET(req: NextRequest) {
     }
 
     const data = await response.json();
-    const articlesToReturn = [];
 
     if (Array.isArray(data.results)) {
       for (const article of data.results) {
-        articlesToReturn.push(article);
-
         const existingArticle = await prisma.newsArticle.findUnique({
           where: { url: article.url },
         });
@@ -78,8 +59,6 @@ export async function GET(req: NextRequest) {
       console.error("No results found in the API response.");
       return NextResponse.json({ error: "No results found" }, { status: 520 });
     }
-
-    return NextResponse.json(articlesToReturn, { status: 200 });
   } catch (error) {
     console.error("Error fetching or storing articles:", error);
     return NextResponse.json(
