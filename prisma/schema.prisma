@@ -21,9 +21,9 @@ model NewsArticle {
   description String?
   age         String?
   pageAge     DateTime?
-  scheme      String
-  netloc      String
-  hostname    String
+  scheme      String?
+  netloc      String?
+  hostname    String?
   favicon     String?
   path        String?
   thumbnail   String?
