@@ -12,4 +12,4 @@ jobs:
       - name: Make API Request
         run: |
           curl --request GET \
-          --url 'https://music-news1.vercel.app/api/store-article?query=Music'
+          --url 'https://music.bocono-labs.com/api/store-article?query=Music'
