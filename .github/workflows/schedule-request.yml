@@ -6,7 +6,7 @@ on:
 
 jobs:
   make-request:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
 
     steps:
       - name: Make API Request
