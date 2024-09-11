@@ -1,0 +1,15 @@
+name: Scheduled API Request
+
+on:
+  schedule:
+    - cron: "*/30 * * * *"
+
+jobs:
+  make-request:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Make API Request
+        run: |
+          curl --request GET \
+          --url 'https://music-news1.vercel.app/api/store-article?query=Music'
