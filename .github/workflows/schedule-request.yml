@@ -10,7 +10,6 @@ jobs:
 
     steps:
       - name: Make API Request
-        uses: fjogeleit/http-request-action@v1
-        with:
-          url: "https://music-news1.vercel.app/api/store-article?query=Music"
-          method: "GET"
+        run: |
+          curl --request GET \
+          --url 'https://music-news1.vercel.app/api/store-article?query=Music'
