@@ -28,5 +28,13 @@ model NewsArticle {
   favicon     String?
   path        String?
   thumbnail   String?
+  sourceId    Int
+  source      Sources  @relation(fields: [sourceId], references: [id])
 }
 
+model Sources {
+  id          Int           @id @default(autoincrement())
+  title       String
+  url         String        @unique
+  articles    NewsArticle[]
+}
