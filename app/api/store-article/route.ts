@@ -11,9 +11,14 @@ export async function GET(req: NextRequest) {
     );
   }
 
+  const params = new URLSearchParams({
+    q: "Music",
+    site: "https://www.cbsnews.com/",
+  });
+
   try {
     const response = await fetch(
-      `https://api.search.brave.com/res/v1/news/search?q=Music`,
+      `https://api.search.brave.com/res/v1/news/search?${params.toString()}`,
       {
         headers: {
           Accept: "application/json",
