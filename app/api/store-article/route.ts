@@ -1,6 +1,29 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 
+interface MetaUrl {
+  scheme: string;
+  netloc: string;
+  hostname: string;
+  favicon: string;
+  path: string;
+}
+
+interface Thumbnail {
+  src: string;
+}
+
+interface ArticleData {
+  type: string;
+  title: string;
+  url: string;
+  description: string;
+  age: string;
+  page_age: Date;
+  meta_url: MetaUrl;
+  thumbnail: Thumbnail;
+}
+
 export async function GET(req: NextRequest) {
   const token = process.env.BRAVE_API_TOKEN;
 
@@ -11,14 +34,24 @@ export async function GET(req: NextRequest) {
     );
   }
 
-  const params = new URLSearchParams({
-    q: "Music",
-    site: "https://www.cbsnews.com/",
-  });
-
   try {
+    const randomSource = await prisma.sources.findFirst({
+      orderBy: {
+        id: "asc",
+      },
+      take: 1,
+      skip: Math.floor(Math.random() * (await prisma.sources.count())),
+    });
+
+    if (!randomSource) {
+      return NextResponse.json(
+        { error: "No sources available" },
+        { status: 500 }
+      );
+    }
+
     const response = await fetch(
-      `https://api.search.brave.com/res/v1/news/search?${params.toString()}`,
+      `https://api.search.brave.com/res/v1/news/search?q=Music`,
       {
         headers: {
           Accept: "application/json",
@@ -34,7 +67,12 @@ export async function GET(req: NextRequest) {
     const data = await response.json();
 
     if (Array.isArray(data.results)) {
-      for (const article of data.results) {
+      const filteredData = data.results.filter((article: ArticleData) =>
+        article.url.includes(randomSource.url)
+      );
+
+      console.log(filteredData);
+      for (const article of filteredData) {
         const existingArticle = await prisma.newsArticle.findUnique({
           where: { url: article.url },
         });
@@ -54,6 +92,7 @@ export async function GET(req: NextRequest) {
               favicon: article.meta_url?.favicon,
               path: article.meta_url?.path,
               thumbnail: article.thumbnail?.src,
+              sourceId: randomSource.id,
             },
           });
         } else {
