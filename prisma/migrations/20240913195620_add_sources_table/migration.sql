@@ -4,9 +4,6 @@
   - Added the required column `sourceId` to the `NewsArticle` table without a default value. This is not possible if the table is not empty.
 
 */
--- AlterTable
-ALTER TABLE "NewsArticle" ADD COLUMN     "sourceId" INTEGER NOT NULL;
-
 -- CreateTable
 CREATE TABLE "Sources" (
     "id" SERIAL NOT NULL,
