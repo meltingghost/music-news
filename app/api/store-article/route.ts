@@ -35,30 +35,41 @@ export async function GET(req: NextRequest) {
   }
 
   try {
-    const randomSource = await prisma.sources.findFirst({
+    const oldestNewsSource = await prisma.sources.findFirst({
       orderBy: {
-        id: "asc",
+        updatedAt: "asc",
       },
-      take: 1,
-      skip: Math.floor(Math.random() * (await prisma.sources.count())),
     });
 
-    if (!randomSource) {
+    if (!oldestNewsSource) {
       return NextResponse.json(
         { error: "No sources available" },
         { status: 500 }
       );
     }
 
-    const response = await fetch(
-      `https://api.search.brave.com/res/v1/news/search?q=Music`,
-      {
-        headers: {
-          Accept: "application/json",
-          "X-Subscription-Token": token,
-        },
-      }
-    );
+    await prisma.sources.update({
+      where: { id: oldestNewsSource.id },
+      data: { updatedAt: new Date() },
+    });
+
+    const alphabet = "abcdefghijklmnopqrstuvwxyz";
+    const randomIndex = Math.floor(Math.random() * alphabet.length);
+    const keyword = alphabet[randomIndex];
+
+    const searchQuery = oldestNewsSource
+      ? `${keyword} site:${oldestNewsSource.url}`
+      : `${keyword}`;
+
+    const url =
+      "https://api.search.brave.com/res/v1/news/search?q=" + searchQuery;
+
+    const response = await fetch(url, {
+      headers: {
+        Accept: "application/json",
+        "X-Subscription-Token": token,
+      },
+    });
 
     if (!response.ok) {
       throw new Error("Failed to fetch search results");
@@ -67,12 +78,7 @@ export async function GET(req: NextRequest) {
     const data = await response.json();
 
     if (Array.isArray(data.results)) {
-      const filteredData = data.results.filter((article: ArticleData) =>
-        article.url.includes(randomSource.url)
-      );
-
-      console.log(filteredData);
-      for (const article of filteredData) {
+      for (const article of data.results) {
         const existingArticle = await prisma.newsArticle.findUnique({
           where: { url: article.url },
         });
@@ -92,7 +98,7 @@ export async function GET(req: NextRequest) {
               favicon: article.meta_url?.favicon,
               path: article.meta_url?.path,
               thumbnail: article.thumbnail?.src,
-              sourceId: randomSource.id,
+              sourceId: oldestNewsSource.id,
             },
           });
         } else {
