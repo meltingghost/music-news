@@ -37,4 +37,5 @@ model Sources {
   title       String
   url         String        @unique
   articles    NewsArticle[]
+  updatedAt   DateTime      @updatedAt
 }
