@@ -1,6 +1,29 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 
+interface MetaUrl {
+  scheme: string;
+  netloc: string;
+  hostname: string;
+  favicon: string;
+  path: string;
+}
+
+interface Thumbnail {
+  src: string;
+}
+
+interface ArticleData {
+  type: string;
+  title: string;
+  url: string;
+  description: string;
+  age: string;
+  page_age: Date;
+  meta_url: MetaUrl;
+  thumbnail: Thumbnail;
+}
+
 export async function GET(req: NextRequest) {
   const token = process.env.BRAVE_API_TOKEN;
 
@@ -12,15 +35,41 @@ export async function GET(req: NextRequest) {
   }
 
   try {
-    const response = await fetch(
-      `https://api.search.brave.com/res/v1/news/search?q=Music`,
-      {
-        headers: {
-          Accept: "application/json",
-          "X-Subscription-Token": token,
-        },
-      }
-    );
+    const oldestNewsSource = await prisma.sources.findFirst({
+      orderBy: {
+        updatedAt: "asc",
+      },
+    });
+
+    if (!oldestNewsSource) {
+      return NextResponse.json(
+        { error: "No sources available" },
+        { status: 500 }
+      );
+    }
+
+    await prisma.sources.update({
+      where: { id: oldestNewsSource.id },
+      data: { updatedAt: new Date() },
+    });
+
+    const alphabet = "abcdefghijklmnopqrstuvwxyz";
+    const randomIndex = Math.floor(Math.random() * alphabet.length);
+    const keyword = alphabet[randomIndex];
+
+    const searchQuery = oldestNewsSource
+      ? `${keyword} site:${oldestNewsSource.url}`
+      : `${keyword}`;
+
+    const url =
+      "https://api.search.brave.com/res/v1/news/search?q=" + searchQuery;
+
+    const response = await fetch(url, {
+      headers: {
+        Accept: "application/json",
+        "X-Subscription-Token": token,
+      },
+    });
 
     if (!response.ok) {
       throw new Error("Failed to fetch search results");
@@ -49,6 +98,7 @@ export async function GET(req: NextRequest) {
               favicon: article.meta_url?.favicon,
               path: article.meta_url?.path,
               thumbnail: article.thumbnail?.src,
+              sourceId: oldestNewsSource.id,
             },
           });
         } else {
