@@ -37,7 +37,7 @@ export async function GET(req: NextRequest) {
   try {
     const oldestNewsSource = await prisma.sources.findFirst({
       orderBy: {
-        updatedAt: "asc",
+        updatedAt: "desc",
       },
     });
 
@@ -84,12 +84,27 @@ export async function GET(req: NextRequest) {
         });
 
         if (!existingArticle) {
+          const parseResponse = await fetch(
+            `https://music.bocono-labs.com/api/parse-article?url=${article.url}`,
+            {
+              method: "GET",
+            }
+          );
+
+          if (!parseResponse.ok) {
+            console.error(`Failed to parse article at URL: ${article.url}`);
+            continue;
+          }
+
+          const parsedData = await parseResponse.json();
+          console.log(parsedData);
+
           await prisma.newsArticle.create({
             data: {
               type: article.type,
-              title: article.title,
+              title: parsedData.title || article.title,
               url: article.url,
-              description: article.description,
+              description: parsedData.excerpt || article.description,
               age: article.age,
               pageAge: new Date(article.page_age),
               scheme: article.meta_url?.scheme,
