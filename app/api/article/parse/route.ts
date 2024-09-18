@@ -1,8 +1,9 @@
+import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import { JSDOM } from "jsdom";
 import { Readability } from "@mozilla/readability";
 
-export default async function processUnparsedArticles() {
+export default async function parseArticles() {
   try {
     const unparsedArticles = await prisma.newsArticle.findMany({
       where: { parsed: false },
@@ -51,7 +52,16 @@ export default async function processUnparsedArticles() {
         );
       }
     }
+
+    return NextResponse.json(
+      { message: "Articles processed successfully" },
+      { status: 200 }
+    );
   } catch (error) {
     console.error("Error fetching unparsed articles", error);
+    return NextResponse.json(
+      { error: "Internal Server Error" },
+      { status: 500 }
+    );
   }
 }
