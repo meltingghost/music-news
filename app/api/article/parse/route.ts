@@ -6,7 +6,7 @@ import { Readability } from "@mozilla/readability";
 export async function GET(req: NextRequest) {
   try {
     const unparsedArticles = await prisma.newsArticle.findMany({
-      where: { parsed: false },
+      where: { parsed: false, deleted: false },
       select: { url: true, id: true },
     });
 
