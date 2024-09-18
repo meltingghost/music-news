@@ -2,7 +2,7 @@ import prisma from "@/lib/prisma";
 import { JSDOM } from "jsdom";
 import { Readability } from "@mozilla/readability";
 
-export async function processUnparsedArticles() {
+export default async function processUnparsedArticles() {
   try {
     const unparsedArticles = await prisma.newsArticle.findMany({
       where: { parsed: false },
