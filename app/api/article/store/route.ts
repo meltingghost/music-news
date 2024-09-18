@@ -3,12 +3,17 @@ import prisma from "@/lib/prisma";
 
 export async function GET(req: NextRequest) {
   const token = process.env.BRAVE_API_TOKEN;
+  const authHeader = req.headers.get("Authorization");
 
   if (!token) {
     return NextResponse.json(
       { error: "API token is not set" },
       { status: 500 }
     );
+  }
+
+  if (authHeader !== process.env.API_TOKEN) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
   try {
