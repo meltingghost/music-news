@@ -1,7 +1,7 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 
-export default async function storeArticles() {
+export default async function GET(req: NextRequest) {
   const token = process.env.BRAVE_API_TOKEN;
 
   if (!token) {
