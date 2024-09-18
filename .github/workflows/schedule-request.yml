@@ -12,6 +12,6 @@ jobs:
       - name: Make API Request
         run: |
           curl --request GET \
-          --url 'https://music.bocono-labs.com/api/article/store'
+          --url 'https://music.bocono-labs.com/api/store'
           curl --request GET \
-          --url 'https://music.bocono-labs.com/api/article/parse'
+          --url 'https://music.bocono-labs.com/api/parse'
