@@ -15,21 +15,26 @@ datasource db {
 }
 
 model NewsArticle {
-  id          Int      @id @default(autoincrement())
-  type        String
-  title       String
-  url         String   @unique
-  description String?
-  age         String?
-  pageAge     DateTime?
-  scheme      String?
-  netloc      String?
-  hostname    String?
-  favicon     String?
-  path        String?
-  thumbnail   String?
-  sourceId    Int
-  source      Sources  @relation(fields: [sourceId], references: [id])
+  id            Int      @id @default(autoincrement())
+  type          String
+  title         String
+  url           String   @unique
+  description   String?
+  age           String?
+  pageAge       DateTime?
+  scheme        String?
+  netloc        String?
+  hostname      String?
+  favicon       String?
+  path          String?
+  thumbnail     String?
+  sourceId      Int
+  source        Sources  @relation(fields: [sourceId], references: [id])
+  parsed        Boolean  @default(false)
+  parsedTitle   String?
+  parsedContent String?
+  parsedExcerpt String?
+  deleted       Boolean  @default(false)
 }
 
 model Sources {
