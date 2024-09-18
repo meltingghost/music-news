@@ -3,7 +3,7 @@ import prisma from "@/lib/prisma";
 import { JSDOM } from "jsdom";
 import { Readability } from "@mozilla/readability";
 
-export default async function GET(req: NextRequest) {
+export async function GET(req: NextRequest) {
   try {
     const unparsedArticles = await prisma.newsArticle.findMany({
       where: { parsed: false },
