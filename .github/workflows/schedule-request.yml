@@ -5,15 +5,20 @@ on:
     - cron: "*/30 * * * *"
 
 jobs:
-  make-request:
+  store:
     runs-on: self-hosted
-
     steps:
-      - name: Make API Request
+      - name: Pull the News from the Brave Search API and Store them in the Database
         run: |
           curl --request GET \
           --url 'https://music.bocono-labs.com/api/article/store' \
           --header "Authorization: ${{ secrets.API_TOKEN }}"
+
+  parse:
+    runs-on: self-hosted
+    steps:
+      - name: Parse the News using Readability
+        run: |
           curl --request GET \
           --url 'https://music.bocono-labs.com/api/article/parse' \
           --header "Authorization: ${{ secrets.API_TOKEN }}"
