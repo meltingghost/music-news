@@ -3,7 +3,7 @@ import prisma from "@/lib/prisma";
 import { JSDOM } from "jsdom";
 import { Readability } from "@mozilla/readability";
 
-export async function GET(req: NextRequest) {
+export async function POST(req: NextRequest) {
   const authHeader = req.headers.get("Authorization");
 
   if (authHeader !== process.env.API_TOKEN) {

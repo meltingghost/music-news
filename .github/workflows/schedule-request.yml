@@ -10,7 +10,7 @@ jobs:
     steps:
       - name: Pull the News from the Brave Search API and Store them in the Database
         run: |
-          curl --request GET \
+          curl --request POST \
           --url 'https://music.bocono-labs.com/api/article/store' \
           --header "Authorization: ${{ secrets.API_TOKEN }}"
 
@@ -19,6 +19,6 @@ jobs:
     steps:
       - name: Parse the News using Readability
         run: |
-          curl --request GET \
+          curl --request POST \
           --url 'https://music.bocono-labs.com/api/article/parse' \
           --header "Authorization: ${{ secrets.API_TOKEN }}"
