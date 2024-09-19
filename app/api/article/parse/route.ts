@@ -4,6 +4,12 @@ import { JSDOM } from "jsdom";
 import { Readability } from "@mozilla/readability";
 
 export async function GET(req: NextRequest) {
+  const authHeader = req.headers.get("Authorization");
+
+  if (authHeader !== process.env.API_TOKEN) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
   try {
     const unparsedArticles = await prisma.newsArticle.findMany({
       where: { parsed: false, deleted: false },
