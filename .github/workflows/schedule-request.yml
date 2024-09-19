@@ -12,7 +12,7 @@ jobs:
         run: |
           curl --request POST \
           --url 'https://music.bocono-labs.com/api/article/store' \
-          --header "Authorization: ${{ secrets.API_TOKEN }}"
+          --header "API_TOKEN: ${{ secrets.API_TOKEN }}"
 
   parse:
     runs-on: self-hosted
@@ -21,4 +21,4 @@ jobs:
         run: |
           curl --request POST \
           --url 'https://music.bocono-labs.com/api/article/parse' \
-          --header "Authorization: ${{ secrets.API_TOKEN }}"
+          --header "API_TOKEN: ${{ secrets.API_TOKEN }}"

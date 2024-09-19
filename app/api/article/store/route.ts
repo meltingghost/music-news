@@ -3,7 +3,7 @@ import prisma from "@/lib/prisma";
 
 export async function POST(req: NextRequest) {
   const token = process.env.BRAVE_API_TOKEN;
-  const authHeader = req.headers.get("Authorization");
+  const authHeader = req.headers.get("API_TOKEN");
 
   if (!token) {
     return NextResponse.json(

@@ -4,7 +4,7 @@ import { JSDOM } from "jsdom";
 import { Readability } from "@mozilla/readability";
 
 export async function POST(req: NextRequest) {
-  const authHeader = req.headers.get("Authorization");
+  const authHeader = req.headers.get("API_TOKEN");
 
   if (authHeader !== process.env.API_TOKEN) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
