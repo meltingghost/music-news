@@ -89,7 +89,7 @@ export async function POST(req: NextRequest) {
         }
       }
       return NextResponse.json(
-        { message: "Articles parsed successfully" },
+        { message: "Articles stored successfully" },
         { status: 200 }
       );
     } else {

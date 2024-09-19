@@ -60,7 +60,7 @@ export async function POST(req: NextRequest) {
     }
 
     return NextResponse.json(
-      { message: "Articles stored successfully" },
+      { message: "Articles parsed successfully" },
       { status: 200 }
     );
   } catch (error) {
