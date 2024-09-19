@@ -1,31 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 
-interface MetaUrl {
-  scheme: string;
-  netloc: string;
-  hostname: string;
-  favicon: string;
-  path: string;
-}
-
-interface Thumbnail {
-  src: string;
-}
-
-interface ArticleData {
-  type: string;
-  title: string;
-  url: string;
-  description: string;
-  age: string;
-  page_age: Date;
-  meta_url: MetaUrl;
-  thumbnail: Thumbnail;
-}
-
 export async function GET(req: NextRequest) {
   const token = process.env.BRAVE_API_TOKEN;
+  const authHeader = req.headers.get("Authorization");
 
   if (!token) {
     return NextResponse.json(
@@ -34,10 +12,14 @@ export async function GET(req: NextRequest) {
     );
   }
 
+  if (authHeader !== process.env.API_TOKEN) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
   try {
     const oldestNewsSource = await prisma.sources.findFirst({
       orderBy: {
-        updatedAt: "asc",
+        updatedAt: "desc",
       },
     });
 
@@ -99,6 +81,7 @@ export async function GET(req: NextRequest) {
               path: article.meta_url?.path,
               thumbnail: article.thumbnail?.src,
               sourceId: oldestNewsSource.id,
+              parsed: false,
             },
           });
         } else {
