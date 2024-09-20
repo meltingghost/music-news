@@ -35,6 +35,8 @@ model NewsArticle {
   parsedContent String?
   parsedExcerpt String?
   deleted       Boolean  @default(false)
+  vectorized    Boolean  @default(false)
+  embedding     String?
 }
 
 model Sources {
