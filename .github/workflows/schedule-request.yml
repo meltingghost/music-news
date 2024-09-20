@@ -17,8 +17,17 @@ jobs:
   parse:
     runs-on: self-hosted
     steps:
-      - name: Parse the News using Readability
+      - name: Parse the News using Readability and Store the Parsed data in the Database
         run: |
           curl --request POST \
           --url 'https://music.bocono-labs.com/api/article/parse' \
+          --header "API_TOKEN: ${{ secrets.API_TOKEN }}"
+
+  embed:
+    runs-on: self-hosted
+    steps:
+      - name: Embed the News using OpenAI and Store the Embedded data in the Database
+        run: |
+          curl --request POST \
+          --url 'https://music.bocono-labs.com/api/article/embed' \
           --header "API_TOKEN: ${{ secrets.API_TOKEN }}"
