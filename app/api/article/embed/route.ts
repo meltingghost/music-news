@@ -20,6 +20,13 @@ export async function POST(req: NextRequest) {
 
     for (const article of articles) {
       try {
+        if (article.parsedContent === null) {
+          console.warn(
+            `Skipping article with URL: ${article.url} due to null content`
+          );
+          continue;
+        }
+
         const Embedding = await getEmbedding(article.parsedContent);
         const embeddingString = JSON.stringify(Embedding);
 
