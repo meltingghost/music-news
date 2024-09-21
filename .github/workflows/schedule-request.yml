@@ -18,6 +18,7 @@ jobs:
     runs-on: self-hosted
     steps:
       - name: Parse the News using Readability and Store the Parsed data in the Database
+      needs: store
         run: |
           curl --request POST \
           --url 'https://music.bocono-labs.com/api/article/parse' \
