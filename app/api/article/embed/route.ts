@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getEmbedding } from "@/utils/openai";
 import prisma from "@/lib/prisma";
+export const maxDuration = 60;
 
 export async function POST(req: NextRequest) {
   const authHeader = req.headers.get("API_TOKEN");
@@ -11,6 +12,11 @@ export async function POST(req: NextRequest) {
 
   try {
     const articles = await prisma.newsArticle.findMany({
+      where: {
+        deleted: false,
+        parsed: true,
+        vectorized: false,
+      },
       select: {
         id: true,
         url: true,
@@ -28,13 +34,17 @@ export async function POST(req: NextRequest) {
         }
 
         const Embedding = await getEmbedding(article.parsedContent);
-        const embeddingString = JSON.stringify(Embedding);
+        const embeddingString = `[${Embedding.join(",")}]`;
+        await prisma.$executeRaw`
+  UPDATE "NewsArticle"
+  SET "embedding" = ${embeddingString}::vector
+  WHERE "id" = ${article.id}
+`;
 
         await prisma.newsArticle.update({
           where: { id: article.id },
           data: {
             vectorized: true,
-            embedding: embeddingString,
           },
         });
 
