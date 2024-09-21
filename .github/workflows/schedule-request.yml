@@ -28,6 +28,7 @@ jobs:
     runs-on: self-hosted
     steps:
       - name: Embed the News using OpenAI and Store the Embedded data in the Database
+        needs: parse
         run: |
           curl --request POST \
           --url 'https://music.bocono-labs.com/api/article/embed' \
