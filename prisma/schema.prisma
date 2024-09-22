@@ -5,13 +5,15 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["postgresqlExtensions"]
 }
 
 datasource db {
-  provider  = "postgresql"
+  provider   = "postgresql"
   url       = env("DATABASE_URL")
   directUrl = env("DATABASE_URL_UNPOOLED")
+  extensions = [vector]
 }
 
 model NewsArticle {
@@ -36,7 +38,7 @@ model NewsArticle {
   parsedExcerpt String?
   deleted       Boolean  @default(false)
   vectorized    Boolean  @default(false)
-  embedding     String?
+  embedding     Unsupported("vector(1536)")?
 }
 
 model Sources {
