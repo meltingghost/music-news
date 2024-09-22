@@ -10,7 +10,7 @@ export async function getEmbedding(text: string): Promise<number[]> {
     });
     return res.data[0].embedding;
   } catch (error) {
-    console.error("Error al generar el embedding:", error);
+    console.error("Error generating embedding:", error);
     throw error;
   }
 }
