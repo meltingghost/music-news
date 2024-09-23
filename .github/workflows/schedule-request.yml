@@ -33,3 +33,13 @@ jobs:
           curl --request POST \
           --url 'https://music.bocono-labs.com/api/article/embed' \
           --header "API_TOKEN: ${{ secrets.API_TOKEN }}"
+
+  save-img:
+    runs-on: self-hosted
+    needs: embed
+    steps:
+      - name: Get the images from the Articles, uploads them to the cloud and store the links in the Database
+        run: |
+          curl --request POST \
+          --url 'https://music.bocono-labs.com/api/article/save-img' \
+          --header "API_TOKEN: ${{ secrets.API_TOKEN }}"

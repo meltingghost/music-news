@@ -39,6 +39,8 @@ model NewsArticle {
   deleted       Boolean  @default(false)
   vectorized    Boolean  @default(false)
   embedding     Unsupported("vector(1536)")?
+  storedImage   Boolean  @default(false)
+  cloudinaryUrl String?  @unique
 }
 
 model Sources {
