@@ -41,6 +41,7 @@ model NewsArticle {
   embedding     Unsupported("vector(1536)")?
   storedImage   Boolean  @default(false)
   cloudinaryUrl String?  @unique
+  createdAt     DateTime @default(now())
 }
 
 model Sources {
