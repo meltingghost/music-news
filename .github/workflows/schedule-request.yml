@@ -16,9 +16,9 @@ jobs:
 
   parse:
     runs-on: self-hosted
+    needs: store
     steps:
       - name: Parse the News using Readability and Store the Parsed data in the Database
-      needs: store
         run: |
           curl --request POST \
           --url 'https://music.bocono-labs.com/api/article/parse' \
@@ -26,9 +26,9 @@ jobs:
 
   embed:
     runs-on: self-hosted
+    needs: parse
     steps:
       - name: Embed the News using OpenAI and Store the Embedded data in the Database
-        needs: parse
         run: |
           curl --request POST \
           --url 'https://music.bocono-labs.com/api/article/embed' \
