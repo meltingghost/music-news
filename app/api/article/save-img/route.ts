@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import { JSDOM } from "jsdom";
 import { v2 as cloudinary } from "cloudinary";
+export const maxDuration = 60;
 
 export async function POST(req: NextRequest) {
   const authHeader = req.headers.get("API_TOKEN");
@@ -12,7 +13,11 @@ export async function POST(req: NextRequest) {
 
   try {
     const articles = await prisma.newsArticle.findMany({
-      where: { parsed: true, deleted: false, vectorized: true },
+      where: {
+        deleted: false,
+        vectorized: true,
+        storedImage: false,
+      },
       select: { url: true, id: true },
     });
 
@@ -55,10 +60,6 @@ export async function POST(req: NextRequest) {
             },
           });
         }
-
-        console.log(
-          `Successfully stored the image of article with URL: ${article.url}`
-        );
       } catch (error) {
         console.error(
           `Error processing article with URL: ${article.url}`,
