@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import { JSDOM } from "jsdom";
 import { Readability } from "@mozilla/readability";
+export const maxDuration = 60;
 
 export async function POST(req: NextRequest) {
   const authHeader = req.headers.get("API_TOKEN");
