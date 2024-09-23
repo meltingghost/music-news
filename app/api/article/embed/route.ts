@@ -34,20 +34,11 @@ export async function POST(req: NextRequest) {
         }
 
         const Embedding = await getEmbedding(article.parsedContent);
-        const embeddingString = `[${Embedding.join(",")}]`;
         await prisma.$executeRaw`
   UPDATE "NewsArticle"
-  SET "embedding" = ${embeddingString}::vector
+  SET "embedding" = ${Embedding}::vector, "vectorized" = true
   WHERE "id" = ${article.id}
 `;
-
-        await prisma.newsArticle.update({
-          where: { id: article.id },
-          data: {
-            vectorized: true,
-          },
-        });
-
         console.log(`Successfully embedded article with URL: ${article.url}`);
       } catch (error) {
         console.error(
