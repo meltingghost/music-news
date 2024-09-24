@@ -34,6 +34,7 @@ export async function POST(req: NextRequest) {
             where: { id: article.id },
             data: {
               deleted: true,
+              deletedReason: "Not parsed",
             },
           });
           continue;
