@@ -19,7 +19,7 @@ export async function POST(req: NextRequest) {
   try {
     const oldestNewsSource = await prisma.sources.findFirst({
       orderBy: {
-        updatedAt: "desc",
+        updatedAt: "asc",
       },
     });
 
