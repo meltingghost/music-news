@@ -37,10 +37,12 @@ model NewsArticle {
   parsedContent String?
   parsedExcerpt String?
   deleted       Boolean  @default(false)
+  deletedReason String?
   vectorized    Boolean  @default(false)
   embedding     Unsupported("vector(1536)")?
   storedImage   Boolean  @default(false)
   cloudinaryUrl String?  @unique
+  filtered      Boolean  @default(false)
   createdAt     DateTime @default(now())
 }
 

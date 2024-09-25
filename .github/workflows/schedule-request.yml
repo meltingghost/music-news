@@ -43,3 +43,13 @@ jobs:
           curl --request POST \
           --url 'https://music.bocono-labs.com/api/article/save-img' \
           --header "API_TOKEN: ${{ secrets.API_TOKEN }}"
+
+  filter:
+    runs-on: self-hosted
+    needs: save-img
+    steps:
+      - name: Get the articles, compares their vectorized values and discards the duplicates.
+        run: |
+          curl --request POST \
+          --url 'https://music.bocono-labs.com/api/article/filter' \
+          --header "API_TOKEN: ${{ secrets.API_TOKEN }}"
