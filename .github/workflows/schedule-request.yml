@@ -53,13 +53,3 @@ jobs:
           curl --request POST \
           --url 'https://music.bocono-labs.com/api/article/filter' \
           --header "API_TOKEN: ${{ secrets.API_TOKEN }}"
-
-  post:
-    runs-on: self-hosted
-    needs: filter
-    steps:
-      - name: Get the articles, writes the blog entries and saves them on the database.
-        run: |
-          curl --request POST \
-          --url 'https://music.bocono-labs.com/api/article/post' \
-          --header "API_TOKEN: ${{ secrets.API_TOKEN }}"
