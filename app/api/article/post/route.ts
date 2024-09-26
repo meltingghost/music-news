@@ -23,12 +23,13 @@ export async function POST(req: NextRequest) {
       orderBy: {
         createdAt: "desc",
       },
-      take: 20,
+      take: 1,
       select: {
         id: true,
         title: true,
         url: true,
         parsedContent: true,
+        cloudinaryUrl: true,
       },
     });
 
@@ -41,35 +42,43 @@ export async function POST(req: NextRequest) {
           continue;
         }
 
-        const blogContent = await writePost(article.parsedContent);
+        const { blogContent, blogTitle, blogExcerpt } = await writePost(
+          article.parsedContent
+        );
 
-        if (!blogContent) {
-          console.error(`Error generating Blog Content for ${article.id}`);
+        if (!blogContent || !blogTitle || !blogExcerpt) {
+          console.error(
+            `Error generating Blog Content, Title, or Excerpt for article with URL: ${article.url}`
+          );
           await prisma.newsArticle.update({
             where: {
               id: article.id,
             },
             data: {
               deleted: true,
-              deletedReason: "Unable to generate Blog Post",
+              deletedReason: "Unable to generate Blog Post, Title, or Excerpt",
             },
           });
         } else {
-          const slug = slugify(article.title, { lower: true, strict: true });
+          const slug = slugify(blogTitle, { lower: true, strict: true });
 
-          await prisma.post.create({
-            data: {
-              slug: slug || uuidv4(),
-              title: article.title,
-              content: blogContent,
-              articleId: article.id,
-            },
-          });
-
-          await prisma.newsArticle.update({
-            where: { id: article.id },
-            data: { posted: true },
-          });
+          await Promise.all([
+            prisma.post.create({
+              data: {
+                slug: slug || uuidv4(),
+                title: blogTitle,
+                content: blogContent,
+                excerpt: blogExcerpt,
+                coverImage: article.cloudinaryUrl,
+                articleId: article.id,
+                publishedAt: new Date(),
+              },
+            }),
+            prisma.newsArticle.update({
+              where: { id: article.id },
+              data: { posted: true },
+            }),
+          ]);
 
           console.log(`Successfully posted article with URL: ${article.url}`);
         }
