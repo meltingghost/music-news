@@ -11,16 +11,16 @@ generator client {
 
 datasource db {
   provider   = "postgresql"
-  url       = env("DATABASE_URL")
-  directUrl = env("DATABASE_URL_UNPOOLED")
+  url        = env("DATABASE_URL")
+  directUrl  = env("DATABASE_URL_UNPOOLED")
   extensions = [vector]
 }
 
 model NewsArticle {
-  id            Int      @id @default(autoincrement())
+  id            Int                          @id @default(autoincrement())
   type          String
   title         String
-  url           String   @unique
+  url           String                       @unique
   description   String?
   age           String?
   pageAge       DateTime?
@@ -31,25 +31,40 @@ model NewsArticle {
   path          String?
   thumbnail     String?
   sourceId      Int
-  source        Sources  @relation(fields: [sourceId], references: [id])
-  parsed        Boolean  @default(false)
+  source        Sources                      @relation(fields: [sourceId], references: [id])
+  parsed        Boolean                      @default(false)
   parsedTitle   String?
   parsedContent String?
   parsedExcerpt String?
-  deleted       Boolean  @default(false)
+  deleted       Boolean                      @default(false)
   deletedReason String?
-  vectorized    Boolean  @default(false)
+  vectorized    Boolean                      @default(false)
   embedding     Unsupported("vector(1536)")?
-  storedImage   Boolean  @default(false)
-  cloudinaryUrl String?  @unique
-  filtered      Boolean  @default(false)
-  createdAt     DateTime @default(now())
+  storedImage   Boolean                      @default(false)
+  cloudinaryUrl String?                      @unique
+  filtered      Boolean                      @default(false)
+  posted        Boolean                      @default(false)
+  createdAt     DateTime                     @default(now())
+  post          Post?
+}
+
+model Post {
+  id          Int         @id @default(autoincrement())
+  slug        String      @unique
+  title       String
+  content     String
+  createdAt   DateTime    @default(now())
+  coverImage  String?
+  excerpt     String?
+  publishedAt DateTime?
+  article     NewsArticle @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  articleId   Int         @unique
 }
 
 model Sources {
-  id          Int           @id @default(autoincrement())
-  title       String
-  url         String        @unique
-  articles    NewsArticle[]
-  updatedAt   DateTime?      @updatedAt
+  id        Int           @id @default(autoincrement())
+  title     String
+  url       String        @unique
+  articles  NewsArticle[]
+  updatedAt DateTime?     @updatedAt
 }

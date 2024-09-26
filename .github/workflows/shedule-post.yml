@@ -1,0 +1,15 @@
+name: Scheduled Blog Post
+
+on:
+  schedule:
+    - cron: "*/30 * * * *"
+
+jobs:
+  post:
+    runs-on: self-hosted
+    steps:
+      - name: Get the articles, writes the blog entries and saves them on the database.
+        run: |
+          curl --request POST \
+          --url 'https://music.bocono-labs.com/api/article/post' \
+          --header "API_TOKEN: ${{ secrets.API_TOKEN }}"
