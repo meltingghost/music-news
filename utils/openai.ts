@@ -17,7 +17,7 @@ export async function getEmbedding(text: string): Promise<number[]> {
 
 export async function writePost(prompt: string) {
   try {
-    const contentRes = await openai.chat.completions.create({
+    const contentReq = openai.chat.completions.create({
       messages: [
         {
           role: "system",
@@ -30,43 +30,52 @@ export async function writePost(prompt: string) {
         },
       ],
       model: "gpt-4o-mini",
-      max_tokens: 1000,
     });
+
+    const titleReq = contentReq.then((contentRes) => {
+      const blogContent = contentRes.choices[0].message.content;
+      return openai.chat.completions.create({
+        messages: [
+          {
+            role: "system",
+            content: "You are a creative assistant in a Music News Blog.",
+          },
+          {
+            role: "user",
+            content: `Generate a catchy title for a blog post based on the following content: ${blogContent}`,
+          },
+        ],
+        model: "gpt-4o-mini",
+        max_tokens: 60,
+      });
+    });
+
+    const excerptReq = contentReq.then((contentRes) => {
+      const blogContent = contentRes.choices[0].message.content;
+      return openai.chat.completions.create({
+        messages: [
+          {
+            role: "system",
+            content: "You are a creative assistant in a Music News Blog.",
+          },
+          {
+            role: "user",
+            content: `Generate a short excerpt for a blog post based on the following content: ${blogContent}`,
+          },
+        ],
+        model: "gpt-4o-mini",
+        max_tokens: 100,
+      });
+    });
+
+    const [contentRes, titleRes, excerptRes] = await Promise.all([
+      contentReq,
+      titleReq,
+      excerptReq,
+    ]);
 
     const blogContent = contentRes.choices[0].message.content;
-
-    const titleRes = await openai.chat.completions.create({
-      messages: [
-        {
-          role: "system",
-          content: "You are a creative assistant in a Music News Blog.",
-        },
-        {
-          role: "user",
-          content: `Generate a catchy title for a blog post based on the following content: ${blogContent}`,
-        },
-      ],
-      model: "gpt-4o-mini",
-      max_tokens: 60,
-    });
-
     const blogTitle = titleRes.choices[0].message.content;
-
-    const excerptRes = await openai.chat.completions.create({
-      messages: [
-        {
-          role: "system",
-          content: "You are a creative assistant in a Music News Blog.",
-        },
-        {
-          role: "user",
-          content: `Generate a short excerpt for a blog post based on the following content: ${blogContent}`,
-        },
-      ],
-      model: "gpt-4o-mini",
-      max_tokens: 100,
-    });
-
     const blogExcerpt = excerptRes.choices[0].message.content;
 
     return { blogContent, blogTitle, blogExcerpt };
