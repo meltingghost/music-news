@@ -57,14 +57,6 @@ model Post {
   coverImage        String?
   excerpt           String?
   publishedAt       DateTime?
-  postedToTwitter   Boolean      @default(false)
-  tweetId           Int?
-  postedToLinkedin  Boolean      @default(false)
-  linkedinPostId    Int?
-  postedToInstagram Boolean      @default(false)
-  instagramMediaId  Int?
-  postedToFacebook  Boolean      @default(false)
-  facebookPostId    Int?
   article           NewsArticle? @relation(fields: [articleId], references: [id], onDelete: Cascade)
   articleId         Int
 }
