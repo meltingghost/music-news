@@ -17,11 +17,12 @@ export async function getEmbedding(text: string): Promise<number[]> {
 
 export async function writePost(prompt: string) {
   try {
-    const res = await openai.chat.completions.create({
+    const contentRes = await openai.chat.completions.create({
       messages: [
         {
           role: "system",
-          content: "You are writing a blog entry for a music news blog.",
+          content:
+            "You are an assistant that converts news into articles in a Music News Blog, in markdown format. The article must remain true to the original news but be rewritten with different words and structure, omitting any direct mention of the specific source and excluding any 'call to action' such as following social media accounts or subscribing to newsletters. Do not include a title at the beginning of the article.",
         },
         {
           role: "user",
@@ -31,7 +32,44 @@ export async function writePost(prompt: string) {
       model: "gpt-4o-mini",
       max_tokens: 1000,
     });
-    return res.choices[0].message.content;
+
+    const blogContent = contentRes.choices[0].message.content;
+
+    const titleRes = await openai.chat.completions.create({
+      messages: [
+        {
+          role: "system",
+          content: "You are a creative assistant in a Music News Blog.",
+        },
+        {
+          role: "user",
+          content: `Generate a catchy title for a blog post based on the following content: ${blogContent}`,
+        },
+      ],
+      model: "gpt-4o-mini",
+      max_tokens: 60,
+    });
+
+    const blogTitle = titleRes.choices[0].message.content;
+
+    const excerptRes = await openai.chat.completions.create({
+      messages: [
+        {
+          role: "system",
+          content: "You are a creative assistant in a Music News Blog.",
+        },
+        {
+          role: "user",
+          content: `Generate a short excerpt for a blog post based on the following content: ${blogContent}`,
+        },
+      ],
+      model: "gpt-4o-mini",
+      max_tokens: 100,
+    });
+
+    const blogExcerpt = excerptRes.choices[0].message.content;
+
+    return { blogContent, blogTitle, blogExcerpt };
   } catch (error) {
     console.error("Error generating response:", error);
     throw error;
