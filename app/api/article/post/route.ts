@@ -14,7 +14,7 @@ export async function POST(req: NextRequest) {
   }
 
   try {
-    const articles = await prisma.newsArticle.findMany({
+    const article = await prisma.newsArticle.findFirst({
       where: {
         deleted: false,
         filtered: true,
@@ -23,7 +23,6 @@ export async function POST(req: NextRequest) {
       orderBy: {
         createdAt: "desc",
       },
-      take: 1,
       select: {
         id: true,
         title: true,
@@ -33,65 +32,70 @@ export async function POST(req: NextRequest) {
       },
     });
 
-    for (const article of articles) {
-      try {
-        if (article.parsedContent === null) {
-          console.warn(
-            `Skipping article with URL: ${article.url} due to null content`
-          );
-          continue;
-        }
+    if (!article) {
+      return NextResponse.json(
+        { message: "No articles to process" },
+        { status: 200 }
+      );
+    }
 
-        const { blogContent, blogTitle, blogExcerpt } = await writePost(
-          article.parsedContent
-        );
+    if (article.parsedContent === null) {
+      console.warn(
+        `Skipping article with URL: ${article.url} due to null content`
+      );
+      return NextResponse.json(
+        { message: "Article skipped due to null content" },
+        { status: 200 }
+      );
+    }
 
-        if (!blogContent || !blogTitle || !blogExcerpt) {
-          console.error(
-            `Error generating Blog Content, Title, or Excerpt for article with URL: ${article.url}`
-          );
-          await prisma.newsArticle.update({
-            where: {
-              id: article.id,
-            },
-            data: {
-              deleted: true,
-              deletedReason: "Unable to generate Blog Post, Title, or Excerpt",
-            },
-          });
-        } else {
-          const slug = slugify(blogTitle, { lower: true, strict: true });
+    try {
+      const { blogContent, blogTitle, blogExcerpt } = await writePost(
+        article.parsedContent
+      );
 
-          await Promise.all([
-            prisma.post.create({
-              data: {
-                slug: slug || uuidv4(),
-                title: blogTitle,
-                content: blogContent,
-                excerpt: blogExcerpt,
-                coverImage: article.cloudinaryUrl,
-                articleId: article.id,
-                publishedAt: new Date(),
-              },
-            }),
-            prisma.newsArticle.update({
-              where: { id: article.id },
-              data: { posted: true },
-            }),
-          ]);
-
-          console.log(`Successfully posted article with URL: ${article.url}`);
-        }
-      } catch (error) {
+      if (!blogContent || !blogTitle || !blogExcerpt) {
         console.error(
-          `Error processing article with URL: ${article.url}`,
-          error
+          `Error generating Blog Content, Title, or Excerpt for article with URL: ${article.url}`
         );
+        await prisma.newsArticle.update({
+          where: {
+            id: article.id,
+          },
+          data: {
+            deleted: true,
+            deletedReason: "Unable to generate Blog Post, Title, or Excerpt",
+          },
+        });
+      } else {
+        const slug = slugify(blogTitle, { lower: true, strict: true });
+
+        await Promise.all([
+          prisma.post.create({
+            data: {
+              slug: slug || uuidv4(),
+              title: blogTitle,
+              content: blogContent,
+              excerpt: blogExcerpt,
+              coverImage: article.cloudinaryUrl,
+              articleId: article.id,
+              publishedAt: new Date(),
+            },
+          }),
+          prisma.newsArticle.update({
+            where: { id: article.id },
+            data: { posted: true },
+          }),
+        ]);
+
+        console.log(`Successfully posted article with URL: ${article.url}`);
       }
+    } catch (error) {
+      console.error(`Error processing article with URL: ${article.url}`, error);
     }
 
     return NextResponse.json(
-      { message: "Articles processed successfully" },
+      { message: "Article processed successfully" },
       { status: 200 }
     );
   } catch (error) {
