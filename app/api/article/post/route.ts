@@ -21,7 +21,7 @@ export async function POST(req: NextRequest) {
         posted: false,
       },
       orderBy: {
-        createdAt: "desc",
+        createdAt: "asc",
       },
       select: {
         id: true,
@@ -50,9 +50,18 @@ export async function POST(req: NextRequest) {
     }
 
     try {
-      const { blogContent, blogTitle, blogExcerpt } = await writePost(
-        article.parsedContent
-      );
+      const {
+        blogContent,
+        blogTitle,
+        blogExcerpt,
+        blogSpanishTitle,
+        blogSpanishContent,
+        blogSpanishExcerpt,
+      } = await writePost(article.parsedContent);
+
+      const titleTranslations = { en: blogTitle, es: blogSpanishTitle };
+      const contentTranslations = { en: blogContent, es: blogSpanishContent };
+      const excerptTranslations = { en: blogExcerpt, es: blogSpanishExcerpt };
 
       if (!blogContent || !blogTitle || !blogExcerpt) {
         console.error(
@@ -80,6 +89,9 @@ export async function POST(req: NextRequest) {
               coverImage: article.cloudinaryUrl,
               articleId: article.id,
               publishedAt: new Date(),
+              titleTranslations: titleTranslations,
+              contentTranslations: contentTranslations,
+              excerptTranslations: excerptTranslations,
             },
           }),
           prisma.newsArticle.update({
