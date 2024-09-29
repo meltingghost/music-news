@@ -9,9 +9,8 @@ generator client {
   previewFeatures = ["postgresqlExtensions"]
 }
 
-generator jsonTypes {
+generator json {
   provider = "prisma-json-types-generator"
-  output   = "/types"
 }
 
 datasource db {
@@ -64,8 +63,11 @@ model Post {
   publishedAt         DateTime?
   article             NewsArticle @relation(fields: [articleId], references: [id], onDelete: Cascade)
   articleId           Int         @unique
+  /// [TitleTranslations]
   titleTranslations   Json?
+  /// [ContentTranslations]
   contentTranslations Json?
+  /// [ExcerptTranslations]
   excerptTranslations Json?
 }
 
