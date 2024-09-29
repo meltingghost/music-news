@@ -119,21 +119,18 @@ export async function writePost(prompt: string) {
       });
     });
 
-    const [
-      contentRes,
-      titleRes,
-      excerptRes,
-      spanishTitleRes,
-      spanishContentRes,
-      spanishExcerptRes,
-    ] = await Promise.all([
+    const [contentRes, titleRes, excerptRes] = await Promise.all([
       contentReq,
       titleReq,
       excerptReq,
-      spanishTitleReq,
-      spanishContentReq,
-      spanishExcerptReq,
     ]);
+
+    const [spanishTitleRes, spanishContentRes, spanishExcerptRes] =
+      await Promise.all([
+        spanishTitleReq,
+        spanishContentReq,
+        spanishExcerptReq,
+      ]);
 
     const blogContent = contentRes.choices[0].message.content;
     const blogTitle = titleRes.choices[0].message.content;
