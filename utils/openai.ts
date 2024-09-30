@@ -78,7 +78,67 @@ export async function writePost(prompt: string) {
     const blogTitle = titleRes.choices[0].message.content;
     const blogExcerpt = excerptRes.choices[0].message.content;
 
-    return { blogContent, blogTitle, blogExcerpt };
+    const spanishTitleReq = openai.chat.completions.create({
+      messages: [
+        {
+          role: "system",
+          content: "You are a translator assistant in a Music News Blog.",
+        },
+        {
+          role: "user",
+          content: `Generate a translation into Spanish for the following title of a blog post (You should not adapt it literally and should make sure it keeps making sense and it's understandable for spanish readers. Also should not translate names, brands or entities): ${blogTitle}`,
+        },
+      ],
+      model: "gpt-4o-mini",
+    });
+
+    const spanishContentReq = openai.chat.completions.create({
+      messages: [
+        {
+          role: "system",
+          content: "You are a translator assistant in a Music News Blog.",
+        },
+        {
+          role: "user",
+          content: `Generate a translation into Spanish for the following content of a blog post (You should not adapt it literally and should make sure it keeps making sense and it's understandable for spanish readers. Also should not translate names, brands or entities): ${blogContent}`,
+        },
+      ],
+      model: "gpt-4o-mini",
+    });
+
+    const spanishExcerptReq = openai.chat.completions.create({
+      messages: [
+        {
+          role: "system",
+          content: "You are a translator assistant in a Music News Blog.",
+        },
+        {
+          role: "user",
+          content: `Generate a translation into Spanish for the following excerpt of a blog post (You should not adapt it literally and should make sure it keeps making sense and it's understandable for spanish readers. Also should not translate names, brands or entities): ${blogExcerpt}`,
+        },
+      ],
+      model: "gpt-4o-mini",
+    });
+
+    const [spanishTitleRes, spanishContentRes, spanishExcerptRes] =
+      await Promise.all([
+        spanishTitleReq,
+        spanishContentReq,
+        spanishExcerptReq,
+      ]);
+
+    const blogSpanishTitle = spanishTitleRes.choices[0].message.content;
+    const blogSpanishContent = spanishContentRes.choices[0].message.content;
+    const blogSpanishExcerpt = spanishExcerptRes.choices[0].message.content;
+
+    return {
+      blogContent,
+      blogTitle,
+      blogExcerpt,
+      blogSpanishTitle,
+      blogSpanishContent,
+      blogSpanishExcerpt,
+    };
   } catch (error) {
     console.error("Error generating response:", error);
     throw error;
