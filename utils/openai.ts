@@ -42,7 +42,7 @@ export async function writePost(prompt: string) {
           },
           {
             role: "user",
-            content: `Generate a catchy title for a blog post based on the following content: ${blogContent}`,
+            content: `Generate a catchy title for a blog post based on the following content (You should avoid putting the title in quotation marks): ${blogContent}`,
           },
         ],
         model: "gpt-4o-mini",
@@ -64,7 +64,7 @@ export async function writePost(prompt: string) {
           },
         ],
         model: "gpt-4o-mini",
-        max_tokens: 100,
+        max_tokens: 80,
       });
     });
 
