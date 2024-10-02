@@ -68,3 +68,9 @@
 //     slug: post.slug,
 //   }));
 // }
+
+const PostPage = () => {
+  return <div>Post Content</div>;
+};
+
+export default PostPage;
