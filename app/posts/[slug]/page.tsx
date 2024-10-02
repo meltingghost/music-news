@@ -68,3 +68,5 @@ type Params = {
 //   //   slug: post.slug,
 //   // }));
 // }
+
+export {};
