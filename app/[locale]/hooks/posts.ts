@@ -1,7 +1,7 @@
-import Post from "@/interfaces/post";
 import fs from "fs";
 import matter from "gray-matter";
 import { join } from "path";
+import Post from "@/interfaces/post";
 import prisma from "@/lib/prisma";
 
 const postsDirectory = join(process.cwd(), "_posts");
@@ -19,21 +19,26 @@ export function getPostBySlug(slug: string) {
   return { ...data, slug: realSlug, content } as Post;
 }
 
-export async function getAllPosts(): Promise<Post[]> {
+export async function getAllPosts(locale: "en" | "es" = "en"): Promise<Post[]> {
   const posts = await prisma.post.findMany({
     orderBy: {
       createdAt: "desc",
     },
-    include: {
-      article: {
-        select: {
-          id: true,
-          type: true,
-          title: true,
-          url: true,
-        },
-      },
+    select: {
+      id: true,
+      slug: true,
+      coverImage: true,
+      publishedAt: true,
+      titleTranslations: true,
+      contentTranslations: true,
+      excerptTranslations: true,
     },
   });
-  return posts as Post[];
+
+  return posts.map((post) => ({
+    ...post,
+    title: post.titleTranslations?.[locale],
+    content: post.contentTranslations?.[locale],
+    excerpt: post.excerptTranslations?.[locale],
+  })) as Post[];
 }
