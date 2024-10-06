@@ -2,6 +2,9 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import RandomGradientLogo from "./random-gradient-logo";
+import LocalizationDropdown from "./localization-dropdown";
+import { useTranslations } from "next-intl";
 
 export function Navbar() {
   const [search, setSearch] = useState("");
@@ -11,49 +14,40 @@ export function Navbar() {
     console.log("Buscando:", search);
   };
 
+  const t = useTranslations("HomePage");
+
   return (
-    <nav className="bg-white shadow-md sticky top-0 z-50">
+    <nav className="bg-black shadow-md sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           <div className="flex-shrink-0">
-            <Link
-              className="text-3xl font-bold text-gray-900 hover:text-gray-700"
-              href="/"
-            >
-              MusicBlog
-            </Link>
+            <RandomGradientLogo />
           </div>
 
           <div className="hidden md:flex space-x-8">
             <Link
-              className="text-lg text-gray-800 hover:text-gray-600"
-              href="/"
-            >
-              Home
-            </Link>
-            <Link
-              className="text-lg text-gray-800 hover:text-gray-600"
+              className="text-lg text-gray-300 hover:text-white"
               href="/news"
             >
-              News
+              {t("navbar1")}
             </Link>
             <Link
-              className="text-lg text-gray-800 hover:text-gray-600"
+              className="text-lg text-gray-300 hover:text-white"
               href="/reviews"
             >
-              Reviews
+              {t("navbar2")}
             </Link>
             <Link
-              className="text-lg text-gray-800 hover:text-gray-600"
+              className="text-lg text-gray-300 hover:text-white"
               href="/about"
             >
-              About
+              {t("navbar3")}
             </Link>
             <Link
-              className="text-lg text-gray-800 hover:text-gray-600"
+              className="text-lg text-gray-300 hover:text-white"
               href="/contact"
             >
-              Contact
+              {t("navbar4")}
             </Link>
           </div>
 
@@ -63,7 +57,7 @@ export function Navbar() {
                 type="text"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                placeholder="Search..."
+                placeholder={t("searchbar")}
                 className="px-4 py-2 border border-gray-300 rounded-md text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-400"
               />
               <button
@@ -73,6 +67,16 @@ export function Navbar() {
                 &#x1F50D;
               </button>
             </form>
+          </div>
+
+          <div className="flex items-center space-x-4">
+            <LocalizationDropdown />
+          </div>
+
+          <div className="flex items-center space-x-4">
+            <button className="bg-slate-400 border-white text-black dark:text-white font-bold py-3 px-8 rounded-full hover:bg-white dark:hover:bg-white dark:hover:text-black duration-200 transition-colors">
+              {t("subscribeButton")}
+            </button>
           </div>
         </div>
       </div>
