@@ -23,7 +23,7 @@ export function PostPreview({ title, coverImage, date, excerpt, slug }: Props) {
       <div className="text-lg mb-4">
         <p>{date.toLocaleDateString()}</p>
       </div>
-      <p className="text-lg leading-relaxed mb-4">{excerpt}</p>
+      <p className="text-lg leading-relaxed mb-4 line-clamp-4">{excerpt}</p>
     </div>
   );
 }
