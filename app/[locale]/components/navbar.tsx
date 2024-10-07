@@ -8,6 +8,7 @@ import { useTranslations } from "next-intl";
 
 export function Navbar() {
   const [search, setSearch] = useState("");
+  const [isSearchVisible, setIsSearchVisible] = useState(false);
 
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -52,21 +53,47 @@ export function Navbar() {
           </div>
 
           <div className="flex items-center space-x-4">
-            <form onSubmit={handleSearchSubmit} className="relative">
-              <input
-                type="text"
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                placeholder={t("searchbar")}
-                className="px-4 py-2 border border-gray-300 rounded-md text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-400"
-              />
+            {!isSearchVisible && (
               <button
-                type="submit"
-                className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-600 hover:text-gray-800"
+                onClick={() => setIsSearchVisible(true)}
+                className="text-gray-300 hover:text-white"
               >
                 &#x1F50D;
               </button>
-            </form>
+            )}
+
+            {isSearchVisible && (
+              <div
+                className={`relative transition-all duration-300 ease-in-out transform ${
+                  isSearchVisible
+                    ? "scale-100 opacity-100"
+                    : "scale-95 opacity-0"
+                }`}
+              >
+                <form onSubmit={handleSearchSubmit}>
+                  <input
+                    type="text"
+                    value={search}
+                    onChange={(e) => setSearch(e.target.value)}
+                    placeholder={t("searchbar")}
+                    className="px-4 py-2 border border-gray-300 rounded-md text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-400"
+                  />
+                  <button
+                    type="submit"
+                    className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-600 hover:text-gray-800"
+                  >
+                    &#x1F50D;
+                  </button>
+                </form>
+
+                <button
+                  onClick={() => setIsSearchVisible(false)}
+                  className="absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2 bg-gray-300 hover:bg-gray-400 text-black rounded-full w-4 h-4 flex items-center justify-center"
+                >
+                  &#x2716;
+                </button>
+              </div>
+            )}
           </div>
 
           <div className="flex items-center space-x-4">
