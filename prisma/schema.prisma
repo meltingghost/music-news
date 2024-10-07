@@ -58,9 +58,9 @@ model Post {
   title               String
   content             String
   createdAt           DateTime    @default(now())
-  coverImage          String?
-  excerpt             String?
-  publishedAt         DateTime?
+  coverImage          String
+  excerpt             String
+  publishedAt         DateTime
   article             NewsArticle @relation(fields: [articleId], references: [id], onDelete: Cascade)
   articleId           Int         @unique
   /// [TitleTranslations]
