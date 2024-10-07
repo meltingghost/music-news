@@ -1,26 +1,15 @@
-import { type Author } from "@/interfaces/author";
 import Link from "next/link";
-import Avatar from "@/components/avatar";
 import CoverImage from "@/components/cover-image";
-import DateFormatter from "@/components/date-formatter";
 
 type Props = {
   title: string;
   coverImage: string;
-  date: string;
+  date: Date;
   excerpt: string;
-  author: Author;
   slug: string;
 };
 
-export function PostPreview({
-  title,
-  coverImage,
-  date,
-  excerpt,
-  author,
-  slug,
-}: Props) {
+export function PostPreview({ title, coverImage, date, excerpt, slug }: Props) {
   return (
     <div>
       <div className="mb-5">
@@ -32,10 +21,9 @@ export function PostPreview({
         </Link>
       </h3>
       <div className="text-lg mb-4">
-        <DateFormatter dateString={date} />
+        <p>{date.toLocaleDateString()}</p>
       </div>
       <p className="text-lg leading-relaxed mb-4">{excerpt}</p>
-      <Avatar name={author.name} picture={author.picture} />
     </div>
   );
 }
