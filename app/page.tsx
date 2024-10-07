@@ -3,18 +3,25 @@ import Container from "@/app/components/container";
 import { Navbar } from "@/app/components/navbar";
 import { Carrousel } from "@/app/components/carrousel";
 import { MoreStories } from "@/app/components/more-stories";
-import { getAllPosts } from "@/app/hooks/posts";
+import { getPaginatedPosts } from "@/lib/api";
 
 export default async function Index() {
-  const allPosts = await getAllPosts();
-  const morePosts = allPosts.slice(7);
+  const carrouselPostsCount = 5;
+  const morePostsCount = 7;
+
+  const carrouselPosts = await getPaginatedPosts(0, carrouselPostsCount);
+
+  const morePosts = await getPaginatedPosts(
+    carrouselPostsCount,
+    morePostsCount
+  );
 
   return (
     <main>
       <Navbar />
-      <Carrousel posts={allPosts.slice(0, 5)} />
+      <Carrousel posts={carrouselPosts} />
       <Container>
-        {morePosts.length > 5 && <MoreStories posts={morePosts} />}
+        {morePosts.length > 0 && <MoreStories posts={morePosts} />}
       </Container>
     </main>
   );
