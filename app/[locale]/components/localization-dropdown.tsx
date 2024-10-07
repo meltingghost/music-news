@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 
 export default function LocalizationDropdown() {
   const pathname = usePathname();
@@ -9,10 +10,21 @@ export default function LocalizationDropdown() {
 
   const currentLocale = pathname.split("/")[1] || "en";
   const [language, setLanguage] = useState<string>(currentLocale);
+  const [isOpen, setIsOpen] = useState(false);
 
-  function handleLanguageChange(event: React.ChangeEvent<HTMLSelectElement>) {
-    const selectedLocale = event.target.value;
+  const languages = [
+    { code: "en", label: "English (en)" },
+    { code: "es", label: "Español (es)" },
+  ];
+
+  const toggleDropdown = () => {
+    setIsOpen(!isOpen);
+  };
+
+  function handleLanguageChange(code: string) {
+    const selectedLocale = code;
     setLanguage(selectedLocale);
+    setIsOpen(false);
 
     let newPath = pathname;
 
@@ -25,17 +37,35 @@ export default function LocalizationDropdown() {
     router.replace(newPath);
   }
 
+  const t = useTranslations("HomePage");
+
   return (
-    <div className="flex items-center space-x-4">
-      <h5>Localization</h5>
-      <select
-        value={language}
-        onChange={handleLanguageChange}
-        className="border border-gray-300 rounded p-2"
+    <div className="relative inline-block text-left bg-white rounded-md">
+      <div
+        className="border border-gray-300 p-2 rounded-md cursor-pointer flex items-center justify-between"
+        onClick={toggleDropdown}
       >
-        <option value="en">English (en)</option>
-        <option value="es">Español (es)</option>
-      </select>
+        <span>
+          {t("dropdown")}({language})
+        </span>
+        <span className="ml-2">▼</span>
+      </div>
+
+      {isOpen && (
+        <ul className="absolute mt-1 border border-gray-300 rounded w-full bg-white z-10">
+          {languages.map((lang) => (
+            <li
+              key={lang.code}
+              className={`p-2 hover:bg-gray-100 cursor-pointer ${
+                lang.code === language ? "font-bold" : ""
+              }`}
+              onClick={() => handleLanguageChange(lang.code)}
+            >
+              {lang.label}
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   );
 }
