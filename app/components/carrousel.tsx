@@ -1,11 +1,11 @@
 "use client";
 
-import Post from "@/interfaces/post";
 import { useState, useEffect } from "react";
+import { Post } from "@prisma/client";
 
-type Props = {
+interface Props {
   posts: Post[];
-};
+}
 
 export function Carrousel({ posts }: Props) {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -37,18 +37,20 @@ export function Carrousel({ posts }: Props) {
             backgroundPosition: "center",
           }}
         >
-          <div className="absolute left-16 bg-black bg-opacity-50 p-8 max-w-md text-white">
+          <div className="absolute left-16 bg-black bg-opacity-50 p-8 min-w-min max-w-md h-full text-white">
             <h2 className="text-4xl font-bold">{post.title}</h2>
             <p className="text-sm my-4">
               {new Date(post.publishedAt).toLocaleDateString()}
             </p>
-            <p className="text-lg">{post.excerpt}</p>
+            <p className="text-base overflow-hidden text-ellipsis line-clamp-6">
+              {post.excerpt}
+            </p>
           </div>
         </div>
       ))}
 
       <button
-        className="absolute left-0 top-1/2 transform h-32 -translate-y-1/2 bg-gray-700 text-white px-3 py-2 opacity-60"
+        className="absolute left-0 top-1/2 transform h-36 -translate-y-1/2 bg-gray-700 text-white px-4 py-3 opacity-60"
         onClick={() =>
           setCurrentSlide((prev) => (prev === 0 ? totalSlides - 1 : prev - 1))
         }
@@ -57,13 +59,25 @@ export function Carrousel({ posts }: Props) {
       </button>
 
       <button
-        className="absolute right-0 top-1/2 transform h-32 -translate-y-1/2 bg-gray-700 text-white px-3 py-2 opacity-60"
+        className="absolute right-0 top-1/2 transform h-36 -translate-y-1/2 bg-gray-700 text-white px-4 py-3 opacity-60"
         onClick={() =>
           setCurrentSlide((prev) => (prev === totalSlides - 1 ? 0 : prev + 1))
         }
       >
         {"->"}
       </button>
+
+      <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
+        {posts.map((_, index) => (
+          <button
+            key={index}
+            className={`w-4 h-4 rounded-full ${
+              currentSlide === index ? "bg-white" : "bg-gray-500"
+            }`}
+            onClick={() => setCurrentSlide(index)}
+          />
+        ))}
+      </div>
     </section>
   );
 }
