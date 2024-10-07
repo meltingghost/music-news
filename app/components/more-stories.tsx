@@ -1,4 +1,4 @@
-import Post from "@/interfaces/post";
+import { Post } from "@prisma/client";
 import { PostPreview } from "@/components/post-preview";
 
 type Props = {
