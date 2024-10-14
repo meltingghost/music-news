@@ -92,7 +92,7 @@ export async function POST(req: NextRequest) {
               title: blogTitle,
               content: blogContent,
               excerpt: blogExcerpt,
-              coverImage: article.cloudinaryUrl,
+              coverImage: article.cloudinaryUrl || "",
               articleId: article.id,
               publishedAt: new Date(),
               titleTranslations: titleTranslations,
