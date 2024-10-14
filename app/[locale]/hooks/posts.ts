@@ -1,8 +1,8 @@
 import fs from "fs";
 import matter from "gray-matter";
 import { join } from "path";
-import Post from "@/interfaces/post";
 import prisma from "@/lib/prisma";
+import { Post } from "@prisma/client";
 
 const postsDirectory = join(process.cwd(), "_posts");
 
