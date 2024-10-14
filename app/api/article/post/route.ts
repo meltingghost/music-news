@@ -91,7 +91,7 @@ export async function POST(req: NextRequest) {
               slug: slug || uuidv4(),
               title: blogTitle,
               content: blogContent,
-              excerpt: blogExcerpt,
+              excerpt: blogExcerpt || "",
               coverImage: article.cloudinaryUrl || "",
               articleId: article.id,
               publishedAt: new Date(),
