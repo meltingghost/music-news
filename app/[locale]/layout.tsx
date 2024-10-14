@@ -5,8 +5,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import cn from "classnames";
 import { ThemeSwitcher } from "@/app/[locale]/components/theme-switcher";
-import { NextIntlClientProvider } from "next-intl";
-import { getMessages } from "next-intl/server";
+import MessagesRequest from "@/app/[locale]/components/messages-request";
 
 import "./globals.css";
 
@@ -20,15 +19,13 @@ export const metadata: Metadata = {
   },
 };
 
-export default async function RootLayout({
+export default function RootLayout({
   children,
   params: { locale },
 }: {
   children: React.ReactNode;
   params: { locale: string };
 }) {
-  const messages = await getMessages();
-
   return (
     <html lang={locale}>
       <head>
@@ -68,9 +65,7 @@ export default async function RootLayout({
         className={cn(inter.className, "dark:bg-slate-900 dark:text-slate-400")}
       >
         <ThemeSwitcher />
-        <NextIntlClientProvider messages={messages}>
-          {children}
-        </NextIntlClientProvider>
+        <MessagesRequest>{children}</MessagesRequest>
         <Footer />
       </body>
     </html>
