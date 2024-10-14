@@ -1,0 +1,15 @@
+{
+  "HomePage": {
+    "navbar1": "News",
+    "navbar2": "Reviews",
+    "navbar3": "About",
+    "navbar4": "Contact",
+    "searchbar": "Search...",
+    "dropdown": "Localization ",
+    "subscribeButton": "Subscribe",
+    "more": "More Posts",
+    "showMore": "Show More",
+    "aboutTitle": "About MusicBlog",
+    "about": "Your go-to platform for the latest updates in the music industry. We bring you fresh news, artist interviews, album reviews, and more."
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "HomePage": {
+    "navbar1": "Noticias",
+    "navbar2": "Reseñas",
+    "navbar3": "Acerca de",
+    "navbar4": "Contacto",
+    "searchbar": "Buscar...",
+    "dropdown": "Localización ",
+    "subscribeButton": "Suscribirse",
+    "more": "Más Publicaciones",
+    "showMore": "Mostrar Más",
+    "aboutTitle": "Sobre MusicBlog",
+    "about": "Tu plataforma de confianza para las últimas noticias en el mundo de la música. Te traemos lo más reciente, entrevistas a artistas, reseñas de discos, y más."
+  }
+}

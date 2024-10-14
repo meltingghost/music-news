@@ -1,10 +1,11 @@
 import React from "react";
-import Footer from "@/app/components/footer";
+import Footer from "@/app/[locale]/components/footer";
 import { CMS_NAME, HOME_OG_IMAGE_URL } from "@/lib/constants";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import cn from "classnames";
-import { ThemeSwitcher } from "@/app/components/theme-switcher";
+import { ThemeSwitcher } from "@/app/[locale]/components/theme-switcher";
+import MessagesRequest from "@/app/[locale]/components/messages-request";
 
 import "./globals.css";
 
@@ -20,11 +21,13 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
+  params: { locale },
+}: {
   children: React.ReactNode;
-}>) {
+  params: { locale: string };
+}) {
   return (
-    <html lang="en">
+    <html lang={locale}>
       <head>
         <link
           rel="apple-touch-icon"
@@ -62,7 +65,7 @@ export default function RootLayout({
         className={cn(inter.className, "dark:bg-slate-900 dark:text-slate-400")}
       >
         <ThemeSwitcher />
-        <div className="min-h-screen">{children}</div>
+        <MessagesRequest>{children}</MessagesRequest>
         <Footer />
       </body>
     </html>

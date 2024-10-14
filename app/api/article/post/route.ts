@@ -63,7 +63,13 @@ export async function POST(req: NextRequest) {
       const contentTranslations = { en: blogContent, es: blogSpanishContent };
       const excerptTranslations = { en: blogExcerpt, es: blogSpanishExcerpt };
 
-      if (!blogContent || !blogTitle || !blogExcerpt) {
+      if (
+        !titleTranslations ||
+        !contentTranslations ||
+        !excerptTranslations ||
+        !blogTitle ||
+        !blogContent
+      ) {
         console.error(
           `Error generating Blog Content, Title, or Excerpt for article with URL: ${article.url}`
         );
@@ -85,7 +91,7 @@ export async function POST(req: NextRequest) {
               slug: slug || uuidv4(),
               title: blogTitle,
               content: blogContent,
-              excerpt: blogExcerpt,
+              excerpt: blogExcerpt || "",
               coverImage: article.cloudinaryUrl || "",
               articleId: article.id,
               publishedAt: new Date(),
