@@ -1,10 +1,9 @@
 "use client";
 
 import React, { useState } from "react";
-import Post from "@/interfaces/post";
 import { PostPreview } from "@/components/post-preview";
 import { useTranslations } from "next-intl";
-import { Link } from "@/i18n/routing";
+import { Post } from "@prisma/client";
 
 type Props = {
   posts: Post[];
