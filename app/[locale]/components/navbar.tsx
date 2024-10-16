@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import { Link } from "@/i18n/routing";
 import { useState } from "react";
 import RandomGradientLogo from "./random-gradient-logo";
 import LocalizationDropdown from "./localization-dropdown";
