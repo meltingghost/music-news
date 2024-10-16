@@ -1,22 +1,40 @@
 "use client";
 
 import React, { useState } from "react";
-import { PostPreview } from "@/components/post-preview";
+import { PostPreview } from "@/app/[locale]/components/post-preview";
 import { useTranslations } from "next-intl";
 import { Post } from "@prisma/client";
+import { fetchMorePosts } from "@/app/actions";
 
 type Props = {
-  posts: Post[];
+  initialPosts: Post[];
+  locale: "en" | "es";
 };
 
-export function MorePosts({ posts }: Props) {
-  const [visiblePosts, setVisiblePosts] = useState(9);
-
-  const handleShowMore = () => {
-    setVisiblePosts((prevVisiblePosts) => prevVisiblePosts + 9);
-  };
+export function MorePosts({ initialPosts, locale }: Props) {
+  const [posts, setPosts] = useState<Post[]>(initialPosts);
+  const [visiblePosts, setVisiblePosts] = useState<number>(9);
+  const [loading, setLoading] = useState(false);
+  const [allPostsLoaded, setAllPostsLoaded] = useState(false);
 
   const t = useTranslations("HomePage");
+
+  const handleShowMore = async () => {
+    setLoading(true);
+    try {
+      const newPosts = await fetchMorePosts(posts.length, 9, locale);
+
+      if (newPosts.length > 0) {
+        setPosts((prevPosts) => [...prevPosts, ...newPosts]);
+      } else {
+        setAllPostsLoaded(true);
+      }
+    } catch (error) {
+      console.error("Error al cargar más posts:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <section>
@@ -41,13 +59,14 @@ export function MorePosts({ posts }: Props) {
         ))}
       </div>
 
-      {visiblePosts < posts.length && (
+      {!allPostsLoaded && (
         <div className="flex justify-center mt-8">
           <button
             className="border-solid border-2 border-black text-black dark:border-white dark:text-white font-bold py-3 px-8 mb-10 rounded hover:bg-black dark:hover:bg-white hover:text-white dark:hover:text-black duration-200 transition-colors"
             onClick={handleShowMore}
+            disabled={loading}
           >
-            {t("showMore")}
+            {loading ? t("loading") : t("showMore")}
           </button>
         </div>
       )}
