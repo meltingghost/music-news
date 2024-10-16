@@ -1,6 +1,5 @@
 import Container from "./container";
 import { useTranslations } from "next-intl";
-import { Link } from "@/i18n/routing";
 
 export default function Footer() {
   const t = useTranslations("HomePage");
