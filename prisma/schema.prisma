@@ -64,11 +64,11 @@ model Post {
   article             NewsArticle @relation(fields: [articleId], references: [id], onDelete: Cascade)
   articleId           Int         @unique
   /// [TitleTranslations]
-  titleTranslations   Json?
+  titleTranslations   Json
   /// [ContentTranslations]
-  contentTranslations Json?
+  contentTranslations Json
   /// [ExcerptTranslations]
-  excerptTranslations Json?
+  excerptTranslations Json
 }
 
 model Sources {

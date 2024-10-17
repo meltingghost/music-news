@@ -1,5 +1,5 @@
-import Link from "next/link";
 import CoverImage from "@/components/cover-image";
+import { Link } from "@/i18n/routing";
 
 type Props = {
   title: string;
@@ -12,14 +12,12 @@ type Props = {
 export function PostPreview({ title, coverImage, date, excerpt, slug }: Props) {
   return (
     <div>
-      <div className="mb-5">
-        <CoverImage slug={slug} title={title} src={coverImage} />
-      </div>
-      <h3 className="text-3xl mb-3 leading-snug">
-        <Link href={`/posts/${slug}`} className="hover:underline">
-          {title}
-        </Link>
-      </h3>
+      <Link href={`/posts/${slug}`} className="hover:underline">
+        <div className="mb-5">
+          <CoverImage title={title} src={coverImage} />
+        </div>
+        <h3 className="text-3xl mb-3 leading-snug">{title}</h3>
+      </Link>
       <div className="text-lg mb-4">
         <p>{date.toLocaleDateString()}</p>
       </div>

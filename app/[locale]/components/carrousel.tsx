@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { Link } from "@/i18n/routing";
 import { Post } from "@prisma/client";
 
 interface Props {
@@ -26,16 +27,18 @@ export function Carrousel({ posts }: Props) {
   return (
     <section className="relative w-screen h-[80vh] overflow-hidden">
       {posts.map((post, index) => (
-        <div
+        <Link
+          href={`/posts/${post.slug}`}
           key={post.slug}
-          className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${
-            currentSlide === index ? "opacity-100" : "opacity-0"
-          }`}
           style={{
             backgroundImage: `url(${post.coverImage})`,
             backgroundSize: "cover",
             backgroundPosition: "center",
+            pointerEvents: currentSlide === index ? "auto" : "none",
           }}
+          className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${
+            currentSlide === index ? "opacity-100" : "opacity-0"
+          }`}
         >
           <div className="absolute left-16 bg-black bg-opacity-50 p-8 min-w-min max-w-md h-full text-white">
             <h2 className="text-4xl font-bold">{post.title}</h2>
@@ -46,7 +49,7 @@ export function Carrousel({ posts }: Props) {
               {post.excerpt}
             </p>
           </div>
-        </div>
+        </Link>
       ))}
 
       <button
