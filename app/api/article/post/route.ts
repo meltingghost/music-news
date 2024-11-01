@@ -59,8 +59,14 @@ export async function POST(req: NextRequest) {
         blogSpanishExcerpt,
       } = await writePost(article.parsedContent);
 
-      const titleTranslations = { en: blogTitle, es: blogSpanishTitle };
-      const contentTranslations = { en: blogContent, es: blogSpanishContent };
+      const titleTranslations = {
+        en: blogTitle || "",
+        es: blogSpanishTitle || "",
+      };
+      const contentTranslations = {
+        en: blogContent || "",
+        es: blogSpanishContent || "",
+      };
       const excerptTranslations = { en: blogExcerpt, es: blogSpanishExcerpt };
 
       if (
