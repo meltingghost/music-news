@@ -22,7 +22,7 @@ export async function POST(req: NextRequest) {
         url: true,
         parsedContent: true,
       },
-      take: 20,
+      take: 10,
     });
 
     for (const article of articles) {

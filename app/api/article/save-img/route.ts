@@ -19,7 +19,7 @@ export async function POST(req: NextRequest) {
         storedImage: false,
       },
       select: { url: true, id: true },
-      take: 20,
+      take: 10,
     });
 
     for (const article of articles) {
