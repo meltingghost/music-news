@@ -55,6 +55,43 @@ export async function fetchMorePosts(
   skip: number,
   take: number,
   locale: "en" | "es"
-) {
-  return await getPaginatedPosts(skip, take, locale);
+): Promise<Post[]> {
+  const res = await fetch(
+    `/api/posts?skip=${skip}&take=${take}&locale=${locale}`
+  );
+
+  if (!res.ok) {
+    throw new Error("Failed to fetch more posts");
+  }
+
+  const data = await res.json();
+  return data;
+}
+
+export async function getPostsByCategory(
+  categoryId: number,
+  skip: number,
+  take: number,
+  locale: "en" | "es" = "en"
+): Promise<Post[]> {
+  const posts = await prisma.post.findMany({
+    where: {
+      categoryId: categoryId,
+    },
+    include: {
+      category: true,
+    },
+    skip,
+    take,
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
+
+  return posts.map((post) => ({
+    ...post,
+    title: post.titleTranslations?.[locale],
+    content: post.contentTranslations?.[locale],
+    excerpt: post.excerptTranslations?.[locale],
+  })) as Post[];
 }
