@@ -8,7 +8,7 @@ interface Props {
   posts: Post[];
 }
 
-export function Carrousel({ posts }: Props) {
+export default function Carrousel({ posts }: Props) {
   const [currentSlide, setCurrentSlide] = useState(0);
 
   const totalSlides = posts.length;
@@ -45,9 +45,14 @@ export function Carrousel({ posts }: Props) {
             <p className="text-sm my-4">
               {new Date(post.publishedAt).toLocaleDateString()}
             </p>
-            <p className="text-base overflow-hidden text-ellipsis line-clamp-6">
-              {post.excerpt}
-            </p>
+            <p
+              className="text-base overflow-hidden text-ellipsis line-clamp-6"
+              dangerouslySetInnerHTML={{
+                __html: post.excerpt
+                  .replace(/\*(.*?)\*/g, "<strong>$1</strong>")
+                  .replace(/\*\*(.*?)\*\*/g, "<em>$1</em>"),
+              }}
+            />
           </div>
         </Link>
       ))}
