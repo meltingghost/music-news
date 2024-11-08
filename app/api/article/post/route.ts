@@ -57,6 +57,7 @@ export async function POST(req: NextRequest) {
         blogSpanishTitle,
         blogSpanishContent,
         blogSpanishExcerpt,
+        blogCategory,
       } = await writePost(article.parsedContent);
 
       const titleTranslations = {
@@ -74,7 +75,8 @@ export async function POST(req: NextRequest) {
         !contentTranslations ||
         !excerptTranslations ||
         !blogTitle ||
-        !blogContent
+        !blogContent ||
+        !blogCategory
       ) {
         console.error(
           `Error generating Blog Content, Title, or Excerpt for article with URL: ${article.url}`
@@ -90,6 +92,7 @@ export async function POST(req: NextRequest) {
         });
       } else {
         const slug = slugify(blogTitle, { lower: true, strict: true });
+        const numberCategory = parseInt(blogCategory);
 
         await Promise.all([
           prisma.post.create({
@@ -104,6 +107,7 @@ export async function POST(req: NextRequest) {
               titleTranslations: titleTranslations,
               contentTranslations: contentTranslations,
               excerptTranslations: excerptTranslations,
+              categoryId: numberCategory,
             },
           }),
           prisma.newsArticle.update({

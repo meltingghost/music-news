@@ -68,15 +68,35 @@ export async function writePost(prompt: string) {
       });
     });
 
-    const [contentRes, titleRes, excerptRes] = await Promise.all([
+    const categoryReq = contentReq.then((contentRes) => {
+      const blogContent = contentRes.choices[0].message.content;
+      return openai.chat.completions.create({
+        messages: [
+          {
+            role: "system",
+            content: "You are a creative assistant in a Music News Blog.",
+          },
+          {
+            role: "user",
+            content: `Categorize the following blog entry into one of the following categories, each one has an id: "News": 1, "Reviews": 2, "New Releases": 3, "Miscelaneous": 4, "Features": 5, "Lists": 6, "Video": 7 (You should respond with just the id number): ${blogContent}`,
+          },
+        ],
+        model: "gpt-4o-mini",
+        max_tokens: 1,
+      });
+    });
+
+    const [contentRes, titleRes, excerptRes, categoryRes] = await Promise.all([
       contentReq,
       titleReq,
       excerptReq,
+      categoryReq,
     ]);
 
     const blogContent = contentRes.choices[0].message.content;
     const blogTitle = titleRes.choices[0].message.content;
     const blogExcerpt = excerptRes.choices[0].message.content;
+    const blogCategory = categoryRes.choices[0].message.content;
 
     const spanishTitleReq = openai.chat.completions.create({
       messages: [
@@ -138,6 +158,7 @@ export async function writePost(prompt: string) {
       blogSpanishTitle,
       blogSpanishContent,
       blogSpanishExcerpt,
+      blogCategory,
     };
   } catch (error) {
     console.error("Error generating response:", error);
