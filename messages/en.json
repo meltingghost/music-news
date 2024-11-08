@@ -2,14 +2,19 @@
   "HomePage": {
     "navbar1": "News",
     "navbar2": "Reviews",
-    "navbar3": "About",
-    "navbar4": "Contact",
+    "navbar3": "New Releases",
+    "navbar4": "Features",
+    "navbar5": "Lists",
+    "navbar6": "Miscellaneous",
+    "navbar7": "About",
+    "navbar8": "Contact",
     "searchbar": "Search...",
     "dropdown": "Localization ",
     "subscribeButton": "Subscribe",
     "more": "More Posts",
     "showMore": "Show More",
     "aboutTitle": "About MusicBlog",
-    "about": "Your go-to platform for the latest updates in the music industry. We bring you fresh news, artist interviews, album reviews, and more."
+    "about": "Your go-to platform for the latest updates in the music industry. We bring you fresh news, artist interviews, album reviews, and more.",
+    "loading": "Loading"
   }
 }
