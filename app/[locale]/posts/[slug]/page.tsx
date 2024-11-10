@@ -37,8 +37,16 @@ export default async function PostPage({ params: { locale, slug } }: Props) {
           />
         </div>
 
-        <article className="prose prose-lg max-w-none text-gray-700 leading-relaxed">
-          <div dangerouslySetInnerHTML={{ __html: post.content }} />
+        <article className="prose prose-lg max-w-none text-gray-700 leading-relaxed text-xl">
+          {post.content.split(/\n{2,}/).map((paragraph, index) => (
+            <p
+              key={index}
+              className="mb-6"
+              dangerouslySetInnerHTML={{
+                __html: paragraph.replace(/\*(.*?)\*/g, "<strong>$1</strong>"),
+              }}
+            />
+          ))}
         </article>
       </div>
     </main>

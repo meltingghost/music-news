@@ -1,7 +1,7 @@
 import React from "react";
 import Container from "@/app/[locale]/components/container";
 import { Navbar } from "@/app/[locale]/components/navbar";
-import { Carrousel } from "@/app/[locale]/components/carrousel";
+import Carrousel from "@/app/[locale]/components/carrousel";
 import { MorePosts } from "@/app/[locale]/components/more-posts";
 import { getPaginatedPosts } from "@/app/actions";
 

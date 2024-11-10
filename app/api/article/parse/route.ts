@@ -15,7 +15,7 @@ export async function POST(req: NextRequest) {
     const unparsedArticles = await prisma.newsArticle.findMany({
       where: { parsed: false, deleted: false },
       select: { url: true, id: true },
-      take: 20,
+      take: 10,
     });
 
     for (const article of unparsedArticles) {

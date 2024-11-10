@@ -26,6 +26,7 @@ export function MorePosts({ initialPosts, locale }: Props) {
 
       if (newPosts.length > 0) {
         setPosts((prevPosts) => [...prevPosts, ...newPosts]);
+        setVisiblePosts((prevVisible) => prevVisible + newPosts.length);
       } else {
         setAllPostsLoaded(true);
       }
@@ -51,7 +52,7 @@ export function MorePosts({ initialPosts, locale }: Props) {
             <PostPreview
               title={post.title}
               coverImage={post.coverImage}
-              date={post.publishedAt}
+              date={new Date(post.publishedAt)}
               slug={post.slug}
               excerpt={post.excerpt}
             />

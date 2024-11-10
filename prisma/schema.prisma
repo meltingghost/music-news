@@ -69,6 +69,14 @@ model Post {
   contentTranslations Json
   /// [ExcerptTranslations]
   excerptTranslations Json
+  categoryId          Int
+  category            Category    @relation(fields: [categoryId], references: [id])
+}
+
+model Category {
+  id    Int    @id @default(autoincrement())
+  name  String @unique
+  posts Post[]
 }
 
 model Sources {
