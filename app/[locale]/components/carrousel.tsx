@@ -41,7 +41,14 @@ export default function Carrousel({ posts }: Props) {
           }`}
         >
           <div className="absolute left-16 bg-black bg-opacity-50 p-8 min-w-min max-w-md h-full text-white">
-            <h2 className="text-4xl font-bold">{post.title}</h2>
+            <h2
+              className="text-4xl font-bold"
+              dangerouslySetInnerHTML={{
+                __html: post.title
+                  .replace(/\*(.*?)\*/g, "<strong>$1</strong>")
+                  .replace(/\*\*(.*?)\*\*/g, "<em>$1</em>"),
+              }}
+            />
             <p className="text-sm my-4">
               {new Date(post.publishedAt).toLocaleDateString()}
             </p>

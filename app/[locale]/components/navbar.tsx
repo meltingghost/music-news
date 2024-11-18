@@ -6,18 +6,23 @@ import RandomGradientLogo from "./random-gradient-logo";
 import LocalizationDropdown from "./localization-dropdown";
 import { useTranslations } from "next-intl";
 import { usePathname } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 export function Navbar() {
   const [search, setSearch] = useState("");
   const [isSearchVisible, setIsSearchVisible] = useState(false);
   const pathname = usePathname();
+  const router = useRouter();
+
+  const currentLocale = pathname.split("/")[1] || "en";
 
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Buscando:", search);
+    const searchUrl = `/${currentLocale}/search?query=${encodeURIComponent(
+      search
+    )}`;
+    window.location.href = searchUrl;
   };
-
-  const currentLocale = pathname.split("/")[1] || "en";
 
   const isActiveLink = (href: string) => {
     const localizedHref = `/${routing.defaultLocale}${href}`;
@@ -92,7 +97,7 @@ export function Navbar() {
           </div>
         </div>
       </nav>
-      <nav className="bg-black shadow-md sticky top-0 z-50 border-t border-white">
+      <nav className="bg-black shadow-md sticky top-0 z-40 border-t border-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="hidden md:flex space-x-8">

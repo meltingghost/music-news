@@ -71,6 +71,7 @@ model Post {
   excerptTranslations Json
   categoryId          Int
   category            Category    @relation(fields: [categoryId], references: [id])
+  searchableText      String?     @db.Text
 }
 
 model Category {

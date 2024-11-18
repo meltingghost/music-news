@@ -52,7 +52,7 @@ export default function LocalizationDropdown() {
       </div>
 
       {isOpen && (
-        <ul className="absolute mt-1 border border-gray-300 rounded w-full bg-white z-10">
+        <ul className="absolute mt-1 border border-gray-300 rounded w-full bg-white z-50">
           {languages.map((lang) => (
             <li
               key={lang.code}
