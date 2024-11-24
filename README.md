@@ -20,8 +20,8 @@ This project is an automated tech news blog built with Next.js. It fetches news 
 
 1. Clone the repository:
 ```
-git clone https://github.com/luisignaciocc/music-news
-cd tech-news
+git clone https://github.com/meltingghost/music-news
+cd music-news
 ```
 2. Install dependencies:
 ```
