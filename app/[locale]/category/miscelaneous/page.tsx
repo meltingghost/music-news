@@ -14,7 +14,7 @@ interface Props {
 }
 
 export default async function NewsPage({ params: { locale } }: Props) {
-  const categoryId = 4;
+  const categoryId = 7;
   const carrouselPostsCount = 6;
   const morePostsCount = 9;
 
