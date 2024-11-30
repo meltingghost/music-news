@@ -19,7 +19,7 @@ export function PostPreview({ title, coverImage, date, excerpt, slug }: Props) {
         <h3
           className="text-3xl mb-3 leading-snug"
           dangerouslySetInnerHTML={{
-            __html: title
+            __html: (title || "")
               .replace(/\*(.*?)\*/g, "<strong>$1</strong>")
               .replace(/\*\*(.*?)\*\*/g, "<em>$1</em>"),
           }}
@@ -31,7 +31,7 @@ export function PostPreview({ title, coverImage, date, excerpt, slug }: Props) {
       <p
         className="text-lg leading-relaxed mb-4 line-clamp-4"
         dangerouslySetInnerHTML={{
-          __html: excerpt
+          __html: (excerpt || "")
             .replace(/\*(.*?)\*/g, "<strong>$1</strong>")
             .replace(/\*\*(.*?)\*\*/g, "<em>$1</em>"),
         }}
