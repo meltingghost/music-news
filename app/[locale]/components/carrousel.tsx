@@ -42,7 +42,7 @@ export default function Carrousel({ posts }: Props) {
         >
           <div className="absolute left-16 bg-black bg-opacity-50 p-8 min-w-min max-w-md h-full text-white">
             <h2
-              className="text-4xl font-bold"
+              className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold"
               dangerouslySetInnerHTML={{
                 __html: post.title
                   .replace(/\*(.*?)\*/g, "<strong>$1</strong>")
