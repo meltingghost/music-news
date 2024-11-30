@@ -5,9 +5,10 @@
     "navbar3": "Nuevos Lanzamientos",
     "navbar4": "Artículos",
     "navbar5": "Listas",
-    "navbar6": "Misceláneos",
-    "navbar7": "Acerca de",
-    "navbar8": "Contacto",
+    "navbar6": "Videos",
+    "navbar7": "Misceláneos",
+    "navbar8": "Acerca de",
+    "navbar9": "Contacto",
     "searchbar": "Buscar...",
     "dropdown": "Localización ",
     "subscribeButton": "Suscribirse",
@@ -28,6 +29,8 @@
     "featuresSubheader": "Información actualizada sobre nuestra cultura",
     "listsHeader": "Listas",
     "listsSubHeader": "Todas las cosas que importan juntas",
+    "videoHeader": "Videos",
+    "videoSubHeader": "Porque escuchar no es suficiente",
     "aboutHeader": "Acerca de",
     "aboutSubheader": "Algunas cosas que deberían saber de su servidor",
     "aboutPageTitle": "¡El arte imita la vida!",
@@ -40,6 +43,7 @@
     "contactSubheader": "Si necesitas una palabra de nosotros",
     "editorName": "Editor (Artículos): Emilio Cabezas",
     "editorEmail": "emiliodavidcabezascc@gmail.com",
-    "contactNotice": "Tenga en cuenta que, debido al enorme volumen de correos electrónicos que recibimos (cientos cada día, la mayoría con solicitudes para escuchar nuevos discos), no podemos responder a todos – hacerlo sería un trabajo de tiempo completo y no tendríamos tiempo para escribir sobre la música que amamos. ¡Saludos!"
+    "contactNotice": "Tenga en cuenta que, debido al enorme volumen de correos electrónicos que recibimos (cientos cada día, la mayoría con solicitudes para escuchar nuevos discos), no podemos responder a todos – hacerlo sería un trabajo de tiempo completo y no tendríamos tiempo para escribir sobre la música que amamos. ¡Saludos!",
+    "searchResult": "Resultados de busqueda para: "
   }
 }
