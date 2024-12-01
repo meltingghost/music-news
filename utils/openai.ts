@@ -78,7 +78,7 @@ export async function writePost(prompt: string) {
           },
           {
             role: "user",
-            content: `Categorize the following blog entry into one of the following categories, each one has an id: "News": 1, "Reviews": 2, "New Releases": 3, "Miscelaneous": 4, "Features": 5, "Lists": 6, "Video": 7 (You should respond with just the id number): ${blogContent}`,
+            content: `Categorize the following blog entry into one of the following categories, each one has an id: "News": 1, "Reviews": 2, "New Releases": 3, "Features": 4, "Lists": 5, "Video": 6, "Miscelaneous": 7 (You should respond with just the id number): ${blogContent}`,
           },
         ],
         model: "gpt-4o-mini",

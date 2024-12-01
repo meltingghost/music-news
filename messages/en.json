@@ -5,9 +5,10 @@
     "navbar3": "New Releases",
     "navbar4": "Features",
     "navbar5": "Lists",
-    "navbar6": "Miscellaneous",
-    "navbar7": "About",
-    "navbar8": "Contact",
+    "navbar6": "Video",
+    "navbar7": "Miscellaneous",
+    "navbar8": "About",
+    "navbar9": "Contact",
     "searchbar": "Search...",
     "dropdown": "Localization ",
     "subscribeButton": "Subscribe",
@@ -28,6 +29,8 @@
     "featuresSubheader": "Up to date information on our culture",
     "listsHeader": "Lists",
     "listsSubheader": "All things that matter put together",
+    "videoHeader": "Video",
+    "videoSubheader": "Because hearing is not enough",
     "aboutHeader": "About",
     "aboutSubheader": "Things you should maybe know about your host",
     "aboutPageTitle": "Art imitates life!",
@@ -40,6 +43,7 @@
     "contactSubheader": "If you need a word from us",
     "editorName": "Editor (Features): Emilio Cabezas",
     "editorEmail": "emiliodavidcabezascc@gmail.com",
-    "contactNotice": "Please note that due to the extreme volume of emails we receive (hundreds and hundreds a day, most with requests to listen to new records) we can’t reply to everything – to do so would be a full-time job and we’d not have any time to write about the music we love. Cheers!"
+    "contactNotice": "Please note that due to the extreme volume of emails we receive (hundreds and hundreds a day, most with requests to listen to new records) we can’t reply to everything – to do so would be a full-time job and we’d not have any time to write about the music we love. Cheers!",
+    "searchResult": "Search results for: "
   }
 }

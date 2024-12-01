@@ -3,7 +3,7 @@ import Carrousel from "@/app/[locale]/components/carrousel";
 import Container from "@/app/[locale]/components/container";
 import { Navbar } from "@/app/[locale]/components/navbar";
 import { MorePostsByCategory } from "@/app/[locale]/components/more-posts-by-category";
-import { MiscHeader } from "@/app/[locale]/components/headers";
+import { VideoHeader } from "@/app/[locale]/components/headers";
 
 type Locale = "en" | "es";
 
@@ -14,7 +14,7 @@ interface Props {
 }
 
 export default async function NewsPage({ params: { locale } }: Props) {
-  const categoryId = 7;
+  const categoryId = 6;
   const carrouselPostsCount = 6;
   const morePostsCount = 9;
 
@@ -36,7 +36,7 @@ export default async function NewsPage({ params: { locale } }: Props) {
   return (
     <main>
       <Navbar />
-      <MiscHeader />
+      <VideoHeader />
       <Carrousel posts={categoryCarrouselPosts} />
       <Container>
         {categoryInitialMorePosts.length > 0 && (

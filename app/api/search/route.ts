@@ -15,11 +15,13 @@ export async function GET(req: Request): Promise<Response> {
       .map((term) => `${term}:*`)
       .join(" & ");
 
+    const tsQueryLanguage = locale === "es" ? "searchVectorEs" : "searchVector";
+
     const results = await prisma.$queryRawUnsafe(
       `
-        SELECT * 
+        SELECT "slug", "title", "coverImage", "excerpt", "publishedAt", "titleTranslations", "contentTranslations", "excerptTranslations"
         FROM "Post" 
-        WHERE "searchVector" @@ to_tsquery('${locale}', $1)
+        WHERE "${tsQueryLanguage}" @@ to_tsquery($1)
         ORDER BY "publishedAt" DESC
         LIMIT $2 OFFSET $3;
       `,

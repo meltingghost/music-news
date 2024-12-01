@@ -111,6 +111,24 @@ export function ListsHeader() {
   );
 }
 
+export function VideoHeader() {
+  const t = useTranslations("HomePage");
+  const gradient = useRandomGradient();
+
+  return (
+    <section className="w-full h-48" style={{ backgroundImage: gradient }}>
+      <div className="py-9 text-white">
+        <h1 className="text-center text-6xl text-slate-100">
+          {t("videoHeader")}
+        </h1>
+        <h2 className="text-center text-2xl text-slate-100">
+          {t("videoSubheader")}
+        </h2>
+      </div>
+    </section>
+  );
+}
+
 export function AboutHeader() {
   const t = useTranslations("HomePage");
   const gradient = useRandomGradient();
