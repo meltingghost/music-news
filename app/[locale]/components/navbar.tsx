@@ -105,8 +105,6 @@ export function Navbar() {
                 "lists",
                 "video",
                 "miscellaneous",
-                "about",
-                "contact",
               ].map((category, idx) => (
                 <Link
                   key={idx}
@@ -120,6 +118,28 @@ export function Navbar() {
                   {t(`navbar${idx + 1}`)}
                 </Link>
               ))}
+              <Link
+                key={7}
+                className={`block text-lg ${
+                  isActiveLink(`/${currentLocale}/about`)
+                    ? "text-white underline underline-offset-8 decoration-white"
+                    : "text-gray-300 hover:text-white"
+                }`}
+                href={`/about`}
+              >
+                {t(`navbar8`)}
+              </Link>
+              <Link
+                key={8}
+                className={`block text-lg ${
+                  isActiveLink(`/${currentLocale}/contact`)
+                    ? "text-white underline underline-offset-8 decoration-white"
+                    : "text-gray-300 hover:text-white"
+                }`}
+                href={`/contact`}
+              >
+                {t(`navbar9`)}
+              </Link>
             </div>
           )}
 
@@ -132,8 +152,6 @@ export function Navbar() {
               "lists",
               "video",
               "miscellaneous",
-              "about",
-              "contact",
             ].map((category, idx) => (
               <Link
                 key={idx}
@@ -147,6 +165,28 @@ export function Navbar() {
                 {t(`navbar${idx + 1}`)}
               </Link>
             ))}
+            <Link
+              key={7}
+              className={`text-sm lg:text-lg ${
+                isActiveLink(`/${currentLocale}/about`)
+                  ? "text-white underline underline-offset-8 decoration-white"
+                  : "text-gray-300 hover:text-white"
+              }`}
+              href={`/about`}
+            >
+              {t(`navbar8`)}
+            </Link>
+            <Link
+              key={8}
+              className={`text-sm lg:text-lg ${
+                isActiveLink(`/${currentLocale}/contact`)
+                  ? "text-white underline underline-offset-8 decoration-white"
+                  : "text-gray-300 hover:text-white"
+              }`}
+              href={`/contact`}
+            >
+              {t(`navbar9`)}
+            </Link>
           </div>
         </div>
       </nav>
