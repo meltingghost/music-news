@@ -1,3 +1,4 @@
+// TODO: Add skeleton loading (Suspense)
 import React from "react";
 import Container from "@/app/[locale]/components/container";
 import { Navbar } from "@/app/[locale]/components/navbar";
@@ -17,6 +18,7 @@ export default async function Index({ params: { locale } }: Props) {
   const carrouselPostsCount = 6;
   const morePostsCount = 9;
 
+  // TODO: Add promise.all([])
   const carrouselPosts = await getPaginatedPosts(
     0,
     carrouselPostsCount,

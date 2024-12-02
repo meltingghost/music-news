@@ -1,6 +1,7 @@
 import prisma from "@/lib/prisma";
 import { Post } from "@prisma/client";
 
+// TODO: Action is a write operation, this should be a query or function
 export async function getPaginatedPosts(
   skip: number,
   take: number,
@@ -87,6 +88,7 @@ export async function getPostBySlug(slug: string, locale: "en" | "es" = "en") {
   return { ...post, title, content };
 }
 
+// TODO: Doesnt mix fetchs with queries
 export async function fetchMorePosts(
   skip: number,
   take: number,

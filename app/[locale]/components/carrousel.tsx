@@ -8,6 +8,7 @@ interface Props {
   posts: Post[];
 }
 
+// TODO: Convert to server component and add the query here, also wrap it in a Suspense
 export default function Carrousel({ posts }: Props) {
   const [currentSlide, setCurrentSlide] = useState(0);
 
@@ -64,6 +65,7 @@ export default function Carrousel({ posts }: Props) {
         </Link>
       ))}
 
+      {/* TODO: Move buttons to a new client component and import it here */}
       <button
         className="absolute left-0 top-1/2 transform h-36 -translate-y-1/2 bg-gray-700 text-white px-4 py-3 opacity-60"
         onClick={() =>
