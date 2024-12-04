@@ -32,41 +32,41 @@ export async function getPaginatedPosts(
   })) as Post[];
 }
 
-export async function getPaginatedPostsByCategory(
-  take: number,
-  locale: "en" | "es" = "en",
-  categoryId?: number,
-  excludedIds: number[] = []
-): Promise<Post[]> {
-  const posts = await prisma.post.findMany({
-    take,
-    where: {
-      categoryId,
-      id: {
-        notIn: excludedIds,
-      },
-    },
-    orderBy: {
-      createdAt: "desc",
-    },
-    select: {
-      id: true,
-      slug: true,
-      coverImage: true,
-      publishedAt: true,
-      titleTranslations: true,
-      contentTranslations: true,
-      excerptTranslations: true,
-    },
-  });
+// export async function getPaginatedPostsByCategory(
+//   take: number,
+//   locale: "en" | "es" = "en",
+//   categoryId?: number,
+//   excludedIds: number[] = []
+// ): Promise<Post[]> {
+//   const posts = await prisma.post.findMany({
+//     take,
+//     where: {
+//       categoryId,
+//       id: {
+//         notIn: excludedIds,
+//       },
+//     },
+//     orderBy: {
+//       createdAt: "desc",
+//     },
+//     select: {
+//       id: true,
+//       slug: true,
+//       coverImage: true,
+//       publishedAt: true,
+//       titleTranslations: true,
+//       contentTranslations: true,
+//       excerptTranslations: true,
+//     },
+//   });
 
-  return posts.map((post) => ({
-    ...post,
-    title: post.titleTranslations?.[locale],
-    content: post.contentTranslations?.[locale],
-    excerpt: post.excerptTranslations?.[locale],
-  })) as Post[];
-}
+//   return posts.map((post) => ({
+//     ...post,
+//     title: post.titleTranslations?.[locale],
+//     content: post.contentTranslations?.[locale],
+//     excerpt: post.excerptTranslations?.[locale],
+//   })) as Post[];
+// }
 
 export async function getPostBySlug(slug: string, locale: "en" | "es" = "en") {
   const post = await prisma.post.findUnique({
@@ -106,53 +106,53 @@ export async function fetchMorePosts(
   return data;
 }
 
-export async function fetchMorePostsByCategory(
-  take: number,
-  locale: "en" | "es",
-  categoryId: number,
-  loadedPostIds: number[]
-): Promise<Post[]> {
-  const res = await fetch(
-    `/api/posts?take=${take}&locale=${locale}&categoryId=${categoryId}&loadedPostIds=${loadedPostIds.join(
-      ","
-    )}`
-  );
+// export async function fetchMorePostsByCategory(
+//   take: number,
+//   locale: "en" | "es",
+//   categoryId: number,
+//   loadedPostIds: number[]
+// ): Promise<Post[]> {
+//   const res = await fetch(
+//     `/api/posts?take=${take}&locale=${locale}&categoryId=${categoryId}&loadedPostIds=${loadedPostIds.join(
+//       ","
+//     )}`
+//   );
 
-  if (!res.ok) {
-    throw new Error("Failed to fetch more posts");
-  }
+//   if (!res.ok) {
+//     throw new Error("Failed to fetch more posts");
+//   }
 
-  const data = await res.json();
-  return data;
-}
+//   const data = await res.json();
+//   return data;
+// }
 
-export async function getPostsByCategory(
-  categoryId: number,
-  skip: number,
-  take: number,
-  locale: "en" | "es" = "en"
-): Promise<Post[]> {
-  const posts = await prisma.post.findMany({
-    where: {
-      categoryId: categoryId,
-    },
-    include: {
-      category: true,
-    },
-    skip,
-    take,
-    orderBy: {
-      createdAt: "desc",
-    },
-  });
+// export async function getPostsByCategory(
+//   categoryId: number,
+//   skip: number,
+//   take: number,
+//   locale: "en" | "es" = "en"
+// ): Promise<Post[]> {
+//   const posts = await prisma.post.findMany({
+//     where: {
+//       categoryId: categoryId,
+//     },
+//     include: {
+//       category: true,
+//     },
+//     skip,
+//     take,
+//     orderBy: {
+//       createdAt: "desc",
+//     },
+//   });
 
-  return posts.map((post) => ({
-    ...post,
-    title: post.titleTranslations?.[locale],
-    content: post.contentTranslations?.[locale],
-    excerpt: post.excerptTranslations?.[locale],
-  })) as Post[];
-}
+//   return posts.map((post) => ({
+//     ...post,
+//     title: post.titleTranslations?.[locale],
+//     content: post.contentTranslations?.[locale],
+//     excerpt: post.excerptTranslations?.[locale],
+//   })) as Post[];
+// }
 
 export async function getPostsBySearchResult(
   searchQuery: string,

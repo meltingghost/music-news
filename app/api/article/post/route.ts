@@ -6,6 +6,31 @@ import slugify from "slugify";
 
 export const maxDuration = 60;
 
+async function upsertTags(blogTags: string, blogSpanishTags: string) {
+  const tagsArrayEn = blogTags.split(",").map((tag) => tag.trim());
+  const tagsArrayEs = blogSpanishTags.split(",").map((tag) => tag.trim());
+
+  const tagConnections = [];
+
+  for (let i = 0; i < tagsArrayEn.length; i++) {
+    const tagEn = tagsArrayEn[i];
+    const tagEs = tagsArrayEs[i] || tagEn;
+
+    const tag = await prisma.tags.upsert({
+      where: { nameEn: tagEn },
+      update: {},
+      create: {
+        nameEn: tagEn,
+        nameEs: tagEs,
+      },
+    });
+
+    tagConnections.push({ id: tag.id });
+  }
+
+  return tagConnections;
+}
+
 export async function POST(req: NextRequest) {
   const authHeader = req.headers.get("API_TOKEN");
 
@@ -49,77 +74,78 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    try {
-      const {
-        blogContent,
-        blogTitle,
-        blogExcerpt,
-        blogSpanishTitle,
-        blogSpanishContent,
-        blogSpanishExcerpt,
-        blogCategory,
-      } = await writePost(article.parsedContent);
+    const {
+      blogContent,
+      blogTitle,
+      blogExcerpt,
+      blogTags,
+      blogSpanishTitle,
+      blogSpanishContent,
+      blogSpanishExcerpt,
+      blogSpanishTags,
+    } = await writePost(article.parsedContent);
 
-      const titleTranslations = {
-        en: blogTitle || "",
-        es: blogSpanishTitle || "",
-      };
-      const contentTranslations = {
-        en: blogContent || "",
-        es: blogSpanishContent || "",
-      };
-      const excerptTranslations = { en: blogExcerpt, es: blogSpanishExcerpt };
+    const titleTranslations = {
+      en: blogTitle || "",
+      es: blogSpanishTitle || "",
+    };
+    const contentTranslations = {
+      en: blogContent || "",
+      es: blogSpanishContent || "",
+    };
+    const excerptTranslations = { en: blogExcerpt, es: blogSpanishExcerpt };
 
-      if (
-        !titleTranslations ||
-        !contentTranslations ||
-        !excerptTranslations ||
-        !blogTitle ||
-        !blogContent ||
-        !blogCategory
-      ) {
-        console.error(
-          `Error generating Blog Content, Title, or Excerpt for article with URL: ${article.url}`
-        );
-        await prisma.newsArticle.update({
-          where: {
-            id: article.id,
-          },
+    if (
+      !titleTranslations ||
+      !contentTranslations ||
+      !excerptTranslations ||
+      !blogTitle ||
+      !blogContent ||
+      !blogTags ||
+      !blogSpanishTags
+    ) {
+      console.error(
+        `Error generating Blog Content, Title, or Excerpt for article with URL: ${article.url}`
+      );
+      await prisma.newsArticle.update({
+        where: {
+          id: article.id,
+        },
+        data: {
+          deleted: true,
+          deletedReason: "Unable to generate Blog Post, Title, or Excerpt",
+        },
+      });
+    } else {
+      const slug = slugify(blogTitle, { lower: true, strict: true });
+
+      const tagsToConnect = await upsertTags(blogTags, blogSpanishTags);
+
+      await Promise.all([
+        prisma.post.create({
           data: {
-            deleted: true,
-            deletedReason: "Unable to generate Blog Post, Title, or Excerpt",
-          },
-        });
-      } else {
-        const slug = slugify(blogTitle, { lower: true, strict: true });
-        const numberCategory = parseInt(blogCategory);
-
-        await Promise.all([
-          prisma.post.create({
-            data: {
-              slug: slug || uuidv4(),
-              title: blogTitle,
-              content: blogContent,
-              excerpt: blogExcerpt || "",
-              coverImage: article.cloudinaryUrl || "",
-              articleId: article.id,
-              publishedAt: new Date(),
-              titleTranslations: titleTranslations,
-              contentTranslations: contentTranslations,
-              excerptTranslations: excerptTranslations,
-              categoryId: numberCategory,
+            slug: slug || uuidv4(),
+            title: blogTitle,
+            content: blogContent,
+            excerpt: blogExcerpt || "",
+            coverImage: article.cloudinaryUrl || "",
+            articleId: article.id,
+            publishedAt: new Date(),
+            titleTranslations: titleTranslations,
+            contentTranslations: contentTranslations,
+            excerptTranslations: excerptTranslations,
+            tags: {
+              connect: tagsToConnect,
             },
-          }),
-          prisma.newsArticle.update({
-            where: { id: article.id },
-            data: { posted: true },
-          }),
-        ]);
+          },
+        }),
+        prisma.newsArticle.update({
+          where: { id: article.id },
+          data: { posted: true },
+        }),
+      ]);
 
-        console.log(`Successfully posted article with URL: ${article.url}`);
-      }
-    } catch (error) {
-      console.error(`Error processing article with URL: ${article.url}`, error);
+      console.log(`Successfully posted article with URL: ${article.url}`);
     }
 
     return NextResponse.json(
