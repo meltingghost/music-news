@@ -1,7 +1,7 @@
 "use client";
 
 import { Link, routing } from "@/i18n/routing";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import RandomGradientLogo from "./random-gradient-logo";
 import LocalizationDropdown from "./localization-dropdown";
 import { useTranslations } from "next-intl";
@@ -9,6 +9,7 @@ import { usePathname } from "next/navigation";
 import { useRouter } from "next/navigation";
 
 export function Navbar() {
+  const [tags, setTags] = useState<{ name: string }[]>([]);
   const [search, setSearch] = useState("");
   const [isSearchVisible, setIsSearchVisible] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -17,6 +18,19 @@ export function Navbar() {
   const router = useRouter();
 
   const currentLocale = pathname.split("/")[1] || "en";
+
+  useEffect(() => {
+    const fetchTags = async () => {
+      try {
+        const res = await fetch(`/api/tags/tags?locale=${currentLocale}`);
+        const data = await res.json();
+        setTags(data);
+      } catch (error) {
+        console.error("Error fetching tags:", error);
+      }
+    };
+    fetchTags();
+  }, [currentLocale]);
 
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -97,29 +111,21 @@ export function Navbar() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {isDropdownOpen && (
             <div className="block sm:hidden space-y-2 py-4">
-              {[
-                "news",
-                "reviews",
-                "new-releases",
-                "features",
-                "lists",
-                "video",
-                "miscellaneous",
-              ].map((category, idx) => (
+              {tags.map((tag, idx) => (
                 <Link
                   key={idx}
-                  className={`block text-lg ${
-                    isActiveLink(`/${currentLocale}/category/${category}`)
+                  className={`text-sm lg:text-lg capitalize ${
+                    isActiveLink(`/${currentLocale}/tag/${tag.name}`)
                       ? "text-white underline underline-offset-8 decoration-white"
                       : "text-gray-300 hover:text-white"
                   }`}
-                  href={`/category/${category}`}
+                  href={`/${currentLocale}/tag/${tag.name}`}
                 >
-                  {t(`navbar${idx + 1}`)}
+                  {tag.name}
                 </Link>
               ))}
               <Link
-                key={7}
+                key={6}
                 className={`block text-lg ${
                   isActiveLink(`/${currentLocale}/about`)
                     ? "text-white underline underline-offset-8 decoration-white"
@@ -130,7 +136,7 @@ export function Navbar() {
                 {t(`navbar8`)}
               </Link>
               <Link
-                key={8}
+                key={7}
                 className={`block text-lg ${
                   isActiveLink(`/${currentLocale}/contact`)
                     ? "text-white underline underline-offset-8 decoration-white"
@@ -144,29 +150,21 @@ export function Navbar() {
           )}
 
           <div className="hidden sm:flex space-x-8 my-4">
-            {[
-              "news",
-              "reviews",
-              "new-releases",
-              "features",
-              "lists",
-              "video",
-              "miscellaneous",
-            ].map((category, idx) => (
+            {tags.map((tag, idx) => (
               <Link
                 key={idx}
-                className={`text-sm lg:text-lg ${
-                  isActiveLink(`/${currentLocale}/category/${category}`)
+                className={`text-sm lg:text-lg capitalize ${
+                  isActiveLink(`/${currentLocale}/tag/${tag.name}`)
                     ? "text-white underline underline-offset-8 decoration-white"
                     : "text-gray-300 hover:text-white"
                 }`}
-                href={`/category/${category}`}
+                href={`/tag/${tag.name}`}
               >
-                {t(`navbar${idx + 1}`)}
+                {tag.name}
               </Link>
             ))}
             <Link
-              key={7}
+              key={6}
               className={`text-sm lg:text-lg ${
                 isActiveLink(`/${currentLocale}/about`)
                   ? "text-white underline underline-offset-8 decoration-white"
@@ -177,7 +175,7 @@ export function Navbar() {
               {t(`navbar8`)}
             </Link>
             <Link
-              key={8}
+              key={7}
               className={`text-sm lg:text-lg ${
                 isActiveLink(`/${currentLocale}/contact`)
                   ? "text-white underline underline-offset-8 decoration-white"
