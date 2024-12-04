@@ -68,35 +68,36 @@ export async function writePost(prompt: string) {
       });
     });
 
-    const categoryReq = contentReq.then((contentRes) => {
+    const tagsReq = contentReq.then(async (contentRes) => {
       const blogContent = contentRes.choices[0].message.content;
       return openai.chat.completions.create({
         messages: [
           {
             role: "system",
-            content: "You are a creative assistant in a Music News Blog.",
+            content:
+              "You are a creative assistant for a Music News Blog. Generate relevant tags based on the content.",
           },
           {
             role: "user",
-            content: `Categorize the following blog entry into one of the following categories, each one has an id: "News": 1, "Reviews": 2, "New Releases": 3, "Features": 4, "Lists": 5, "Video": 6, "Miscelaneous": 7 (You should respond with just the id number): ${blogContent}`,
+            content: `Generate up to 5 tags for the following blog entry. Tags should be short, descriptive, and relevant to the content. Separate tags with commas. Blog entry: "${blogContent}"`,
           },
         ],
         model: "gpt-4o-mini",
-        max_tokens: 1,
+        max_tokens: 50,
       });
     });
 
-    const [contentRes, titleRes, excerptRes, categoryRes] = await Promise.all([
+    const [contentRes, titleRes, excerptRes, tagsRes] = await Promise.all([
       contentReq,
       titleReq,
       excerptReq,
-      categoryReq,
+      tagsReq,
     ]);
 
     const blogContent = contentRes.choices[0].message.content;
     const blogTitle = titleRes.choices[0].message.content;
     const blogExcerpt = excerptRes.choices[0].message.content;
-    const blogCategory = categoryRes.choices[0].message.content;
+    const blogTags = tagsRes.choices[0].message.content || "";
 
     const spanishTitleReq = openai.chat.completions.create({
       messages: [
@@ -140,25 +141,46 @@ export async function writePost(prompt: string) {
       model: "gpt-4o-mini",
     });
 
-    const [spanishTitleRes, spanishContentRes, spanishExcerptRes] =
-      await Promise.all([
-        spanishTitleReq,
-        spanishContentReq,
-        spanishExcerptReq,
-      ]);
+    const spanishTagsReq = openai.chat.completions.create({
+      messages: [
+        {
+          role: "system",
+          content: "You are a translator assistant in a Music News Blog.",
+        },
+        {
+          role: "user",
+          content: `Translate the following tags into Spanish: ${blogTags}. Do not translate names, brands, or entities.`,
+        },
+      ],
+      model: "gpt-4o-mini",
+    });
+
+    const [
+      spanishTitleRes,
+      spanishContentRes,
+      spanishExcerptRes,
+      spanishTagsRes,
+    ] = await Promise.all([
+      spanishTitleReq,
+      spanishContentReq,
+      spanishExcerptReq,
+      spanishTagsReq,
+    ]);
 
     const blogSpanishTitle = spanishTitleRes.choices[0].message.content;
     const blogSpanishContent = spanishContentRes.choices[0].message.content;
     const blogSpanishExcerpt = spanishExcerptRes.choices[0].message.content;
+    const blogSpanishTags = spanishTagsRes.choices[0].message.content;
 
     return {
       blogContent,
       blogTitle,
       blogExcerpt,
+      blogTags,
       blogSpanishTitle,
       blogSpanishContent,
       blogSpanishExcerpt,
-      blogCategory,
+      blogSpanishTags,
     };
   } catch (error) {
     console.error("Error generating response:", error);
