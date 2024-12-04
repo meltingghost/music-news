@@ -8,26 +8,32 @@ import { fetchMorePosts } from "@/app/actions";
 
 type Props = {
   initialPosts: Post[];
+  totalPosts: number;
   locale: "en" | "es";
 };
 
-export function MorePosts({ initialPosts, locale }: Props) {
+export function MorePosts({ initialPosts, totalPosts, locale }: Props) {
   const [posts, setPosts] = useState<Post[]>(initialPosts);
-  const [visiblePosts, setVisiblePosts] = useState<number>(9);
+  const [visiblePosts, setVisiblePosts] = useState<number>(initialPosts.length);
   const [loading, setLoading] = useState(false);
-  const [allPostsLoaded, setAllPostsLoaded] = useState(false);
+  const [allPostsLoaded, setAllPostsLoaded] = useState(
+    initialPosts.length >= totalPosts
+  );
 
   const t = useTranslations("HomePage");
 
   const handleShowMore = async () => {
     setLoading(true);
     try {
-      const newPosts = await fetchMorePosts(posts.length, 9, locale);
+      const { posts: newPosts, totalPosts: updatedTotalPosts } =
+        await fetchMorePosts(posts.length + 6, 9, locale);
 
       if (newPosts.length > 0) {
         setPosts((prevPosts) => [...prevPosts, ...newPosts]);
         setVisiblePosts((prevVisible) => prevVisible + newPosts.length);
-      } else {
+      }
+
+      if (posts.length + 6 + newPosts.length >= updatedTotalPosts) {
         setAllPostsLoaded(true);
       }
     } catch (error) {
