@@ -19,12 +19,13 @@ export default async function Index({ params: { locale } }: Props) {
   const morePostsCount = 9;
 
   // TODO: Add promise.all([])
-  const carrouselPosts = await getPaginatedPosts(
+  const { posts: carrouselPosts } = await getPaginatedPosts(
     0,
     carrouselPostsCount,
     locale
   );
-  const initialMorePosts = await getPaginatedPosts(
+
+  const { posts: initialMorePosts, totalPosts } = await getPaginatedPosts(
     carrouselPostsCount,
     morePostsCount,
     locale
@@ -36,7 +37,11 @@ export default async function Index({ params: { locale } }: Props) {
       <Carrousel posts={carrouselPosts} />
       <Container>
         {initialMorePosts.length > 0 && (
-          <MorePosts initialPosts={initialMorePosts} locale={locale} />
+          <MorePosts
+            initialPosts={initialMorePosts}
+            totalPosts={totalPosts}
+            locale={locale}
+          />
         )}
       </Container>
     </main>
