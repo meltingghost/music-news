@@ -17,20 +17,6 @@
     "aboutTitle": "About MusicBlog",
     "about": "Your go-to platform for the latest updates in the music industry. We bring you fresh news, artist interviews, album reviews, and more.",
     "loading": "Loading",
-    "newsHeader": "News",
-    "newsSubheader": "What a time to be alive",
-    "reviewsHeader": "Reviews",
-    "reviewsSubheader": "We are all a little opinionated",
-    "newReleasesHeader": "New Releases",
-    "newReleasesSubheader": "Everything new",
-    "miscelaneousHeader": "Miscellaneous",
-    "miscelaneousSubheader": "Something for everybody",
-    "featuresHeader": "Features",
-    "featuresSubheader": "Up to date information on our culture",
-    "listsHeader": "Lists",
-    "listsSubheader": "All things that matter put together",
-    "videoHeader": "Video",
-    "videoSubheader": "Because hearing is not enough",
     "aboutHeader": "About",
     "aboutSubheader": "Things you should maybe know about your host",
     "aboutPageTitle": "Art imitates life!",
@@ -44,6 +30,7 @@
     "editorName": "Editor (Features): Emilio Cabezas",
     "editorEmail": "emiliodavidcabezascc@gmail.com",
     "contactNotice": "Please note that due to the extreme volume of emails we receive (hundreds and hundreds a day, most with requests to listen to new records) we can’t reply to everything. Cheers!",
-    "searchResult": "Search results for: "
+    "searchResult": "Search results for: ",
+    "tagResult": "Showing posts with tag: "
   }
 }
