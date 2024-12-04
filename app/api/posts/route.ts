@@ -1,25 +1,16 @@
-import { NextRequest, NextResponse } from "next/server";
-// import { getPaginatedPostsByCategory } from "@/app/actions";
+import { NextResponse } from "next/server";
+import { getPaginatedPosts } from "@/app/actions";
 
-export async function GET(req: NextRequest) {
+export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
-  const take = parseInt(searchParams.get("take") || "9", 10);
-  const locale = searchParams.get("locale") || "en";
-  // const categoryId = parseInt(searchParams.get("categoryId") || "0", 10);
-  const loadedPostIds = searchParams.get("loadedPostIds")
-    ? searchParams.get("loadedPostIds")!.split(",").map(Number)
-    : [];
+  const skip = parseInt(searchParams.get("skip") || "0");
+  const take = parseInt(searchParams.get("take") || "9");
+  const locale = (searchParams.get("locale") as "en" | "es") || "en";
 
   try {
-    // const posts = await getPaginatedPostsByCategory(
-    //   take,
-    //   locale as "en" | "es",
-    //   categoryId,
-    //   loadedPostIds
-    // );
-    // return NextResponse.json(posts);
+    const { posts, totalPosts } = await getPaginatedPosts(skip, take, locale);
+    return NextResponse.json({ posts, totalPosts });
   } catch (error) {
-    console.error("Error fetching paginated posts:", error);
     return NextResponse.json(
       { error: "Failed to fetch posts" },
       { status: 500 }
