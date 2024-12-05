@@ -149,7 +149,7 @@ export async function writePost(prompt: string) {
         },
         {
           role: "user",
-          content: `Translate the following tags into Spanish: ${blogTags}. Do not translate names, brands, or entities.`,
+          content: `Translate the following tags into Spanish: ${blogTags}. Do not translate names, brands, or entities. And just answer with the translation.`,
         },
       ],
       model: "gpt-4o-mini",
