@@ -13,7 +13,7 @@ export async function GET(req: Request): Promise<Response> {
       .trim()
       .split(/\s+/)
       .map((term) => `${term}:*`)
-      .join(" & ");
+      .join(" | ");
 
     const tsQueryLanguage = locale === "es" ? "searchVectorEs" : "searchVector";
 
@@ -22,7 +22,7 @@ export async function GET(req: Request): Promise<Response> {
         SELECT "slug", "title", "coverImage", "excerpt", "publishedAt", "titleTranslations", "contentTranslations", "excerptTranslations"
         FROM "Post" 
         WHERE "${tsQueryLanguage}" @@ to_tsquery($1)
-        ORDER BY "publishedAt" DESC
+        ORDER BY ts_rank("${tsQueryLanguage}", to_tsquery($1)) DESC, "publishedAt" DESC
         LIMIT $2 OFFSET $3;
       `,
       searchQuery,

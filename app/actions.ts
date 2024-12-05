@@ -160,7 +160,7 @@ export async function getPostsBySearchResult(
   searchQuery: string,
   skip: number,
   take: number,
-  locale: "en" | "es" = "en"
+  locale: string
 ): Promise<Post[]> {
   const response = await fetch(
     `/api/search?query=${encodeURIComponent(
