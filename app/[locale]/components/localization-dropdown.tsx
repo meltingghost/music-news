@@ -1,8 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
+
+type Tag = {
+  name: string;
+  translations: { en: string; es: string };
+};
 
 export default function LocalizationDropdown() {
   const pathname = usePathname();
@@ -12,27 +17,66 @@ export default function LocalizationDropdown() {
   const currentLocale = pathname.split("/")[1] || "en";
   const [language, setLanguage] = useState<string>(currentLocale);
   const [isOpen, setIsOpen] = useState(false);
+  const [tags, setTags] = useState<Tag[]>([]);
 
-  const languages = [
-    { code: "en", label: "English (en)" },
-    { code: "es", label: "Español (es)" },
-  ];
+  useEffect(() => {
+    const fetchTags = async () => {
+      try {
+        const res = await fetch(`/api/tags/tags?locale=${currentLocale}`);
+        const data = await res.json();
+        setTags(data);
+      } catch (error) {
+        console.error("Error fetching tags:", error);
+      }
+    };
+    fetchTags();
+  }, [currentLocale]);
 
-  const toggleDropdown = () => {
-    setIsOpen(!isOpen);
-  };
+  const handleLocaleChange = (newLocale: string) => {
+    const isTagPage = pathname.includes("/tag/");
+    const currentTag = decodeURIComponent(
+      pathname.split("/tag/")[1]?.split("/")[0] || ""
+    );
 
-  function handleLanguageChange(code: string) {
-    const selectedLocale = code;
-    setLanguage(selectedLocale);
-    setIsOpen(false);
+    if (isTagPage && currentTag) {
+      if (tags.length === 0) {
+        console.warn("Tags not loaded yet. Please wait.");
+        return;
+      }
+
+      const tagTranslation = tags.find(
+        (tag) => tag.translations[currentLocale as "en" | "es"] === currentTag
+      );
+
+      if (tagTranslation) {
+        const newTag = tagTranslation.translations[newLocale as "en" | "es"];
+        const encodedCurrentTag = encodeURIComponent(currentTag);
+        const newPathname = pathname
+          .replace(`/${currentLocale}/`, `/${newLocale}/`)
+          .replace(
+            `/tag/${encodedCurrentTag}`,
+            `/tag/${encodeURIComponent(newTag)}`
+          );
+        router.push(newPathname);
+        console.log("Nuevo Pathname:", newPathname);
+
+        return;
+      } else {
+        console.error(
+          "No matching tag translation found for:",
+          currentTag,
+          "in locale:",
+          currentLocale
+        );
+      }
+    }
 
     let newPath = pathname;
 
     if (currentLocale === "en" || currentLocale === "es") {
-      newPath = pathname.replace(`/${currentLocale}`, `/${selectedLocale}`);
+      newPath = pathname.replace(`/${currentLocale}`, `/${newLocale}`);
     } else {
-      newPath = `/${selectedLocale}${pathname}`;
+      newPath = `/${newLocale}${pathname}`;
     }
 
     const searchParamsString = searchParams.toString();
@@ -41,7 +85,16 @@ export default function LocalizationDropdown() {
       : newPath;
 
     router.replace(newUrl);
-  }
+  };
+
+  const toggleDropdown = () => {
+    setIsOpen(!isOpen);
+  };
+
+  const languages = [
+    { code: "en", label: "English (en)" },
+    { code: "es", label: "Español (es)" },
+  ];
 
   const t = useTranslations("HomePage");
 
@@ -54,7 +107,7 @@ export default function LocalizationDropdown() {
         <span>
           {t("dropdown")}({language})
         </span>
-        <span className="ml-2">▼</span>
+        <span className="ml-2">▼ 🌐</span>
       </div>
 
       {isOpen && (
@@ -65,7 +118,11 @@ export default function LocalizationDropdown() {
               className={`p-2 hover:bg-gray-100 cursor-pointer ${
                 lang.code === language ? "font-bold" : ""
               }`}
-              onClick={() => handleLanguageChange(lang.code)}
+              onClick={() => {
+                setLanguage(lang.code);
+                setIsOpen(false);
+                handleLocaleChange(lang.code);
+              }}
             >
               {lang.label}
             </li>

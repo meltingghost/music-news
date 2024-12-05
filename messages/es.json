@@ -31,6 +31,7 @@
     "editorEmail": "emiliodavidcabezascc@gmail.com",
     "contactNotice": "Tenga en cuenta que, debido al enorme volumen de correos electrónicos que recibimos (cientos cada día, la mayoría con solicitudes para escuchar nuevos discos), no podemos responder a todos – hacerlo sería un trabajo de tiempo completo y no tendríamos tiempo para escribir sobre la música que amamos. ¡Saludos!",
     "searchResult": "Resultados de busqueda para: ",
-    "tagResult": "Mostrando posts con el tag: "
+    "tagResult": "Mostrando posts con el tag: ",
+    "noResults": "No se encontraron resultados"
   }
 }

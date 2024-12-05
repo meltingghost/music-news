@@ -14,8 +14,8 @@ export async function GET(req: Request): Promise<Response> {
         },
       },
       select: {
-        nameEs: locale === "es",
-        nameEn: locale === "en",
+        nameEs: true,
+        nameEn: true,
         _count: {
           select: {
             posts: true,
@@ -26,6 +26,10 @@ export async function GET(req: Request): Promise<Response> {
 
     const formattedTags = tags.map((tag) => ({
       name: locale === "es" ? tag.nameEs : tag.nameEn,
+      translations: {
+        en: tag.nameEn,
+        es: tag.nameEs,
+      },
       postCount: tag._count.posts,
     }));
 
