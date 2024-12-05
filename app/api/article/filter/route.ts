@@ -73,6 +73,7 @@ export async function POST(req: NextRequest) {
             },
           });
         }
+        console.log(`Successfully processed article with URL: ${article.url}`);
       } catch (error) {
         console.error(
           `Error processing article with URL: ${article.url}`,
