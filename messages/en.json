@@ -31,6 +31,7 @@
     "editorEmail": "emiliodavidcabezascc@gmail.com",
     "contactNotice": "Please note that due to the extreme volume of emails we receive (hundreds and hundreds a day, most with requests to listen to new records) we can’t reply to everything. Cheers!",
     "searchResult": "Search results for: ",
-    "tagResult": "Showing posts with tag: "
+    "tagResult": "Showing posts with tag: ",
+    "noResults": "No results found"
   }
 }
