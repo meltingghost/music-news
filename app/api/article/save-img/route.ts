@@ -22,53 +22,57 @@ export async function POST(req: NextRequest) {
       take: 10,
     });
 
-    for (const article of articles) {
-      try {
-        const response = await fetch(article.url);
-        const articleHtml = await response.text();
+    await Promise.all(
+      articles.map(async (article) => {
+        try {
+          const response = await fetch(article.url);
+          const articleHtml = await response.text();
 
-        const dom = new JSDOM(articleHtml);
-        const document = dom.window.document;
+          const dom = new JSDOM(articleHtml);
+          const document = dom.window.document;
 
-        const ogImage = document
-          .querySelector('meta[property="og:image"]')
-          ?.getAttribute("content");
-        const twitterImage = document
-          .querySelector('meta[name="twitter:image"]')
-          ?.getAttribute("content");
-        const wpImage = document
-          .querySelector(".wp-post-image")
-          ?.getAttribute("src");
+          const ogImage = document
+            .querySelector('meta[property="og:image"]')
+            ?.getAttribute("content");
+          const twitterImage = document
+            .querySelector('meta[name="twitter:image"]')
+            ?.getAttribute("content");
+          const wpImage = document
+            .querySelector(".wp-post-image")
+            ?.getAttribute("src");
 
-        const imageUrl = ogImage || twitterImage || wpImage;
+          const imageUrl = ogImage || twitterImage || wpImage;
 
-        if (imageUrl) {
-          const uploadResponse = await cloudinary.uploader.upload(imageUrl);
+          if (imageUrl) {
+            const uploadResponse = await cloudinary.uploader.upload(imageUrl);
 
-          await prisma.newsArticle.update({
-            where: { id: article.id },
-            data: {
-              storedImage: true,
-              cloudinaryUrl: uploadResponse.secure_url,
-            },
-          });
-        } else {
-          console.error(`Failed to get article image for URL: ${article.url}`);
-          await prisma.newsArticle.update({
-            where: { id: article.id },
-            data: {
-              deleted: true,
-              deletedReason: "Image not processed",
-            },
-          });
+            await prisma.newsArticle.update({
+              where: { id: article.id },
+              data: {
+                storedImage: true,
+                cloudinaryUrl: uploadResponse.secure_url,
+              },
+            });
+          } else {
+            console.error(
+              `Failed to get article image for URL: ${article.url}`
+            );
+            await prisma.newsArticle.update({
+              where: { id: article.id },
+              data: {
+                deleted: true,
+                deletedReason: "Image not processed",
+              },
+            });
+          }
+        } catch (error) {
+          console.error(
+            `Error processing article with URL: ${article.url}`,
+            error
+          );
         }
-      } catch (error) {
-        console.error(
-          `Error processing article with URL: ${article.url}`,
-          error
-        );
-      }
-    }
+      })
+    );
 
     return NextResponse.json(
       { message: "Images processed successfully" },

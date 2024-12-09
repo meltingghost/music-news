@@ -18,18 +18,11 @@ export default async function Index({ params: { locale } }: Props) {
   const carrouselPostsCount = 6;
   const morePostsCount = 9;
 
-  // TODO: Add promise.all([])
-  const { posts: carrouselPosts } = await getPaginatedPosts(
-    0,
-    carrouselPostsCount,
-    locale
-  );
-
-  const { posts: initialMorePosts, totalPosts } = await getPaginatedPosts(
-    carrouselPostsCount,
-    morePostsCount,
-    locale
-  );
+  const [{ posts: carrouselPosts }, { posts: initialMorePosts, totalPosts }] =
+    await Promise.all([
+      getPaginatedPosts(0, carrouselPostsCount, locale),
+      getPaginatedPosts(carrouselPostsCount, morePostsCount, locale),
+    ]);
 
   return (
     <main>

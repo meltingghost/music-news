@@ -25,29 +25,31 @@ export async function POST(req: NextRequest) {
       take: 11,
     });
 
-    for (const article of articles) {
-      try {
-        if (article.parsedContent === null) {
-          console.warn(
-            `Skipping article with URL: ${article.url} due to null content`
-          );
-          continue;
-        }
+    await Promise.all(
+      articles.map(async (article) => {
+        try {
+          if (article.parsedContent === null) {
+            console.warn(
+              `Skipping article with URL: ${article.url} due to null content`
+            );
+            return;
+          }
 
-        const Embedding = await getEmbedding(article.parsedContent);
-        await prisma.$executeRaw`
-  UPDATE "NewsArticle"
-  SET "embedding" = ${Embedding}::vector, "vectorized" = true
-  WHERE "id" = ${article.id}
-`;
-        console.log(`Successfully embedded article with URL: ${article.url}`);
-      } catch (error) {
-        console.error(
-          `Error processing article with URL: ${article.url}`,
-          error
-        );
-      }
-    }
+          const Embedding = await getEmbedding(article.parsedContent);
+          await prisma.$executeRaw`
+          UPDATE "NewsArticle"
+          SET "embedding" = ${Embedding}::vector, "vectorized" = true
+          WHERE "id" = ${article.id}
+        `;
+          console.log(`Successfully embedded article with URL: ${article.url}`);
+        } catch (error) {
+          console.error(
+            `Error processing article with URL: ${article.url}`,
+            error
+          );
+        }
+      })
+    );
 
     return NextResponse.json(
       { message: "Embeddings generated and stored successfully." },
