@@ -7,24 +7,25 @@ export async function getPaginatedPosts(
   take: number,
   locale: "en" | "es" = "en"
 ) {
-  const posts = await prisma.post.findMany({
-    skip,
-    take,
-    orderBy: {
-      createdAt: "desc",
-    },
-    select: {
-      id: true,
-      slug: true,
-      coverImage: true,
-      publishedAt: true,
-      titleTranslations: true,
-      contentTranslations: true,
-      excerptTranslations: true,
-    },
-  });
-
-  const totalPosts = await prisma.post.count();
+  const [posts, totalPosts] = await Promise.all([
+    prisma.post.findMany({
+      skip,
+      take,
+      orderBy: {
+        createdAt: "desc",
+      },
+      select: {
+        id: true,
+        slug: true,
+        coverImage: true,
+        publishedAt: true,
+        titleTranslations: true,
+        contentTranslations: true,
+        excerptTranslations: true,
+      },
+    }),
+    prisma.post.count(),
+  ]);
 
   return {
     posts: posts.map((post) => ({

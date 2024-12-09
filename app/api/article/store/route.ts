@@ -19,7 +19,7 @@ export async function POST(req: NextRequest) {
   try {
     const oldestNewsSource = await prisma.sources.findFirst({
       orderBy: {
-        updatedAt: "asc",
+        updatedAt: "desc",
       },
     });
 
@@ -60,34 +60,37 @@ export async function POST(req: NextRequest) {
     const data = await response.json();
 
     if (Array.isArray(data.results)) {
-      for (const article of data.results) {
-        const existingArticle = await prisma.newsArticle.findUnique({
-          where: { url: article.url },
-        });
-
-        if (!existingArticle) {
-          await prisma.newsArticle.create({
-            data: {
-              type: article.type,
-              title: article.title,
-              url: article.url,
-              description: article.description,
-              age: article.age,
-              pageAge: new Date(article.page_age),
-              scheme: article.meta_url?.scheme,
-              netloc: article.meta_url?.netloc,
-              hostname: article.meta_url?.hostname,
-              favicon: article.meta_url?.favicon,
-              path: article.meta_url?.path,
-              thumbnail: article.thumbnail?.src,
-              sourceId: oldestNewsSource.id,
-              parsed: false,
-            },
+      Promise.all(
+        data.results.map(async (article: any) => {
+          const existingArticle = await prisma.newsArticle.findUnique({
+            where: { url: article.url },
           });
-        } else {
-          console.log(`Article with URL ${article.url} already exists.`);
-        }
-      }
+
+          if (!existingArticle) {
+            await prisma.newsArticle.create({
+              data: {
+                type: article.type,
+                title: article.title,
+                url: article.url,
+                description: article.description,
+                age: article.age,
+                pageAge: new Date(article.page_age),
+                scheme: article.meta_url?.scheme,
+                netloc: article.meta_url?.netloc,
+                hostname: article.meta_url?.hostname,
+                favicon: article.meta_url?.favicon,
+                path: article.meta_url?.path,
+                thumbnail: article.thumbnail?.src,
+                sourceId: oldestNewsSource.id,
+                parsed: false,
+              },
+            });
+          } else {
+            console.log(`Article with URL ${article.url} already exists.`);
+          }
+        })
+      );
+
       return NextResponse.json(
         { message: "Articles stored successfully" },
         { status: 200 }
