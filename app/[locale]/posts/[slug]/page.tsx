@@ -1,4 +1,4 @@
-import { getPostBySlug } from "@/app/actions";
+import { getPostBySlug } from "@/app/lib/queries";
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import { Navbar } from "@/app/[locale]/components/navbar";

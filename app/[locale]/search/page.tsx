@@ -3,7 +3,7 @@
 import { useSearchParams, usePathname } from "next/navigation";
 import { PostPreview } from "../components/post-preview";
 import { useEffect, useState } from "react";
-import { getPostsBySearchResult } from "@/app/actions";
+import { fetchPostsBySearchResult } from "@/app/lib/api";
 import { Post } from "@prisma/client";
 import { notFound } from "next/navigation";
 import { Navbar } from "@/app/[locale]/components/navbar";
@@ -23,7 +23,7 @@ export default function SearchPage() {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const results = await getPostsBySearchResult(query, 0, 10, locale);
+        const results = await fetchPostsBySearchResult(query, 0, 10, locale);
         setPosts(results);
       } finally {
         setLoading(false);
