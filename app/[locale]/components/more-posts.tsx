@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { PostPreview } from "@/app/[locale]/components/post-preview";
 import { useTranslations } from "next-intl";
 import { Post } from "@prisma/client";
-import { fetchMorePosts } from "@/app/actions";
+import { fetchMorePosts } from "@/app/lib/api";
 
 type Props = {
   initialPosts: Post[];
