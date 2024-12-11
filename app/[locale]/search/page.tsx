@@ -3,12 +3,12 @@
 import { useSearchParams, usePathname } from "next/navigation";
 import { PostPreview } from "../components/post-preview";
 import { useEffect, useState } from "react";
-import { fetchPostsBySearchResult } from "@/app/lib/api";
+import { fetchPostsBySearchResult } from "@/app/lib/fetches";
 import { Post } from "@prisma/client";
 import { notFound } from "next/navigation";
-import { Navbar } from "@/app/[locale]/components/navbar";
 import { useTranslations } from "next-intl";
 import { SearchHeader } from "@/app/[locale]/components/headers";
+import { NavbarWrapper } from "../components/wrappers";
 
 export default function SearchPage() {
   const searchParams = useSearchParams();
@@ -41,7 +41,7 @@ export default function SearchPage() {
 
   return (
     <main>
-      <Navbar />
+      <NavbarWrapper locale={locale} />
       <SearchHeader query={query} />
       <div className="p-9">
         {loading ? (
