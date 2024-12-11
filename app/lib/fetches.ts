@@ -1,9 +1,19 @@
 import { Post } from "@prisma/client";
+import { Locale } from "@/app/[locale]/components/posts-logic";
+
+export async function fetchTags(locale: Locale) {
+  const res = await fetch(`/api/tags/tags?locale=${locale}`);
+  if (!res.ok) {
+    console.error("Error fetching tags:", res.statusText);
+    return [];
+  }
+  return res.json();
+}
 
 export async function fetchMorePosts(
   skip: number,
   take: number,
-  locale: "en" | "es"
+  locale: Locale
 ): Promise<{ posts: Post[]; totalPosts: number }> {
   const res = await fetch(
     `/api/posts?skip=${skip}&take=${take}&locale=${locale}`
@@ -66,7 +76,7 @@ export async function fetchPostsBySearchResult(
   searchQuery: string,
   skip: number,
   take: number,
-  locale: string
+  locale: Locale
 ): Promise<Post[]> {
   const response = await fetch(
     `/api/search?query=${encodeURIComponent(
