@@ -2,10 +2,15 @@
 
 import { useEffect, useState } from "react";
 import { notFound, useParams, usePathname } from "next/navigation";
-import { Navbar } from "@/app/[locale]/components/navbar";
+import { NavbarWrapper } from "@/app/[locale]/components/wrappers";
 import { useTranslations } from "next-intl";
 import { PostPreview } from "@/app/[locale]/components/post-preview";
 import { TagHeader } from "@/app/[locale]/components/headers";
+
+type Params = {
+  tag: string | string[];
+  locale: "en" | "es";
+};
 
 type Post = {
   id: number;
@@ -17,7 +22,7 @@ type Post = {
 };
 
 export default function TagPage() {
-  const { tag, locale } = useParams();
+  const { tag, locale } = useParams<Params>();
   const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -47,7 +52,7 @@ export default function TagPage() {
 
   return (
     <main>
-      <Navbar />
+      <NavbarWrapper locale={locale} />
       <TagHeader tag={tag} />
       <div className="p-12">
         {loading ? (
