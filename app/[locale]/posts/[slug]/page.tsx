@@ -1,7 +1,7 @@
 import { getPostBySlug } from "@/app/lib/queries";
 import { notFound } from "next/navigation";
 import Image from "next/image";
-import { Navbar } from "@/app/[locale]/components/navbar";
+import { NavbarWrapper } from "@/app/[locale]/components/wrappers";
 
 type Props = {
   params: {
@@ -19,7 +19,7 @@ export default async function PostPage({ params: { locale, slug } }: Props) {
 
   return (
     <main>
-      <Navbar />
+      <NavbarWrapper locale={locale} />
       <div className="max-w-3xl mx-auto px-4 py-10">
         <h1
           className="text-4xl font-bold text-gray-800 mb-6"
