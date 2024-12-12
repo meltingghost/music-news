@@ -1,33 +1,30 @@
-"use client";
-
-import { useState, useEffect } from "react";
 import { Link } from "@/i18n/routing";
 import { Post } from "@prisma/client";
-
-type SlideIndicatorProps = {
-  posts: Post[];
-  totalPosts: number;
-};
 
 type CarrouselPostProps = {
   post: Post;
   index: number;
+  currentSlide: number;
+  setCurrentSlide: any;
 };
 
 type ButtonProps = {
   totalSlides: number;
+  currentSlide: number;
+  setCurrentSlide: any;
 };
 
-export function CarrouselPosts({ post, index }: CarrouselPostProps) {
-  const [currentSlide, setCurrentSlide] = useState(0);
+type SlideIndicatorProps = {
+  posts: Post[];
+  currentSlide: number;
+  setCurrentSlide: any;
+};
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentSlide((prev) => (prev === index ? 0 : prev + 1));
-    }, 5000);
-    return () => clearInterval(interval);
-  }, [currentSlide]);
-
+export function CarrouselPosts({
+  post,
+  index,
+  currentSlide,
+}: CarrouselPostProps) {
   return (
     <Link
       href={`/posts/${post.slug}`}
@@ -66,14 +63,14 @@ export function CarrouselPosts({ post, index }: CarrouselPostProps) {
   );
 }
 
-export function ButtonLeft({ totalSlides }: ButtonProps) {
-  const [currentSlide, setCurrentSlide] = useState(0);
-
+export function ButtonLeft({ totalSlides, setCurrentSlide }: ButtonProps) {
   return (
     <button
       className="absolute left-0 top-1/2 transform h-36 -translate-y-1/2 bg-gray-700 text-white px-4 py-3 opacity-60"
       onClick={() =>
-        setCurrentSlide((prev) => (prev === 0 ? totalSlides - 1 : prev - 1))
+        setCurrentSlide((prev: number) =>
+          prev === 0 ? totalSlides - 1 : prev - 1
+        )
       }
     >
       {"<-"}
@@ -81,14 +78,14 @@ export function ButtonLeft({ totalSlides }: ButtonProps) {
   );
 }
 
-export function ButtonRight({ totalSlides }: ButtonProps) {
-  const [currentSlide, setCurrentSlide] = useState(0);
-
+export function ButtonRight({ totalSlides, setCurrentSlide }: ButtonProps) {
   return (
     <button
       className="absolute right-0 top-1/2 transform h-36 -translate-y-1/2 bg-gray-700 text-white px-4 py-3 opacity-60"
       onClick={() =>
-        setCurrentSlide((prev) => (prev === totalSlides - 1 ? 0 : prev + 1))
+        setCurrentSlide((prev: number) =>
+          prev === totalSlides - 1 ? 0 : prev + 1
+        )
       }
     >
       {"->"}
@@ -96,9 +93,11 @@ export function ButtonRight({ totalSlides }: ButtonProps) {
   );
 }
 
-export function SlideIndicator({ posts }: SlideIndicatorProps) {
-  const [currentSlide, setCurrentSlide] = useState(0);
-
+export function SlideIndicator({
+  posts,
+  currentSlide,
+  setCurrentSlide,
+}: SlideIndicatorProps) {
   return (
     <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
       {posts.map((_, index) => (
