@@ -1,4 +1,4 @@
-import Container from "./container";
+import Container from "@/app/[locale]/components/container";
 import { useTranslations } from "next-intl";
 
 export default function Footer() {
