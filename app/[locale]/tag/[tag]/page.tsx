@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { notFound, useParams, usePathname } from "next/navigation";
-import { NavbarWrapper } from "@/app/[locale]/components/wrappers";
+import Navbar from "@/app/[locale]/components/navbar";
 import { useTranslations } from "next-intl";
 import { PostPreview } from "@/app/[locale]/components/post-preview";
 import { TagHeader } from "@/app/[locale]/components/headers";
@@ -52,7 +52,7 @@ export default function TagPage() {
 
   return (
     <main>
-      <NavbarWrapper locale={locale} />
+      <Navbar locale={locale} />
       <TagHeader tag={tag} />
       <div className="p-12">
         {loading ? (
