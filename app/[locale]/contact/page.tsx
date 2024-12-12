@@ -1,5 +1,5 @@
 import Container from "@/app/[locale]/components/container";
-import { NavbarWrapper } from "@/app/[locale]/components/wrappers";
+import Navbar from "@/app/[locale]/components/navbar";
 import { ContactHeader } from "@/app/[locale]/components/headers";
 import ContactContent from "@/app/[locale]/components/contact-content";
 
@@ -14,7 +14,7 @@ interface Props {
 export default async function NewsPage({ params: { locale } }: Props) {
   return (
     <main>
-      <NavbarWrapper locale={locale} />
+      <Navbar locale={locale} />
       <ContactHeader />
       <Container>
         <ContactContent />

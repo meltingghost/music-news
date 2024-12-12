@@ -2,7 +2,8 @@ import { Post } from "@prisma/client";
 import { Locale } from "@/app/[locale]/components/posts-logic";
 
 export async function fetchTags(locale: Locale) {
-  const res = await fetch(`/api/tags/tags?locale=${locale}`);
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
+  const res = await fetch(`${baseUrl}/api/tags/tags?locale=${locale}`);
   if (!res.ok) {
     console.error("Error fetching tags:", res.statusText);
     return [];
