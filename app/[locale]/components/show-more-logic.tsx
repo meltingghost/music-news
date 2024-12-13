@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { Post } from "@prisma/client";
 import { fetchMorePosts } from "@/app/lib/fetches";
 import { useTranslations } from "next-intl";
-import PostDisplayed from "./posts-displayed";
+import PostDisplayed from "@/app/[locale]/components/posts-displayed";
 
 type ShowMoreButtonProps = {
   initialPosts: Post[];

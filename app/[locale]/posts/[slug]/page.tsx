@@ -2,10 +2,13 @@ import { getPostBySlug } from "@/app/lib/queries";
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import Navbar from "@/app/[locale]/components/navbar";
+import { Suspense } from "react";
+import Skeleton from "@/app/[locale]/components/skeleton";
+import { Locale } from "@/app/[locale]/components/posts-logic";
 
 type Props = {
   params: {
-    locale: "en" | "es";
+    locale: Locale;
     slug: string;
   };
 };
@@ -19,7 +22,9 @@ export default async function PostPage({ params: { locale, slug } }: Props) {
 
   return (
     <main>
-      <Navbar locale={locale} />
+      <Suspense fallback={<Skeleton className="h-24 w-full rounded-md" />}>
+        <Navbar locale={locale} />
+      </Suspense>
       <div className="max-w-3xl mx-auto px-4 py-10">
         <h1
           className="text-4xl font-bold text-gray-800 mb-6"

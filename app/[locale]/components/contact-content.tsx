@@ -1,6 +1,6 @@
 import { useTranslations } from "next-intl";
 
-export default function ContactHeader() {
+export default function ContactContentHeader() {
   const t = useTranslations("HomePage");
   return (
     <div className="py-16 px-32">
