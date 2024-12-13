@@ -3,7 +3,7 @@
 import { Link } from "@/i18n/routing";
 import { useTranslations } from "next-intl";
 import { usePathname } from "next/navigation";
-import { Locale } from "./posts-logic";
+import { Locale } from "@/app/[locale]/components/posts-logic";
 
 type Tag = {
   name: string;
